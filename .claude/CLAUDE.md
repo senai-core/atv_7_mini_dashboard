@@ -11,6 +11,7 @@
 - ***Planning First*** — Ao desenhar um plano, entrar em Plan Mode, ou idear qualquer feature/arquitetura — use o skill `/brainstorming` ***SEMPRE*** antes de partir para implementação.
 - ***Managing Tasks*** — Externalize trabalho não-trivial no TaskManager via `TaskCreate` com dependências explícitas (`blockedBy`). Nunca executar lógica multi-step inline sem um grafo de tarefas.
 - ***Vanilla Stack Only*** — HTML + CSS + JavaScript puro. Sem build tools, sem bundlers, sem transpilers. Tailwind via CDN é aceitável. Libs JS via CDN são aceitáveis. Os 3 arquivos (`index.html`, `style.css`, `script.js`) ficam na raiz, abertos direto no browser.
+- ***Living Docs*** — Toda decisão tomada (escolha de abordagem, tradeoff, descarte de alternativa) e todo código escrito não-trivial deve ser documentado em `docs/`. **Sempre ler `docs/CLAUDE.md`** (índice) antes de implementar, e atualizá-lo ao adicionar novos arquivos. Decisões em `docs/decisions/`, documentação de código em `docs/code/`. Veja a seção [Documentation](#documentation) abaixo.
 
 ### P1 — Standard
 
@@ -82,6 +83,39 @@ atv_7_mini_dashboard/
 - Funções auxiliares com responsabilidade única: separar `render`, `filter`, `calculate`, `persist`.
 - `const`/`let` apenas. **Zero `var`**.
 - Console limpo — zero erros, zero warnings (alvo: rubrica Avançado).
+
+## Documentation
+
+`docs/` é a memória de longo prazo do projeto. Tudo que não é óbvio do código vivo mora aqui.
+
+**Estrutura:**
+
+```
+docs/
+├── CLAUDE.md           # ÍNDICE — sempre ler primeiro, sempre atualizar ao adicionar arquivos
+├── teacher-task.md     # rubrica oficial do AT07
+├── decisions/          # decisões: escolha de abordagem, tradeoffs, alternativas descartadas
+│   └── <slug>.md
+└── code/               # documentação de código: o que cada módulo/função faz e por quê
+    └── <slug>.md
+```
+
+**Quando documentar uma decisão (`docs/decisions/`):**
+- Escolheu abordagem A em vez de B/C — registrar o porquê.
+- Aceitou um tradeoff não-óbvio (ex.: `for` em vez de `forEach` por exigência da rubrica).
+- Descartou uma alternativa que parecia razoável — registrar pra ninguém revisitar à toa.
+- Mudou uma decisão anterior — atualizar o arquivo existente, não criar novo.
+
+**Quando documentar código (`docs/code/`):**
+- Módulo/seção que mereça mais que o auto-explicativo (ex.: contrato do estado, formato dos registros, fluxo de render→filter→persist).
+- Não duplicar o código — descrever interfaces, invariantes, "por quê".
+- Atualizar quando o código mudar de forma que a doc fique mentirosa.
+
+**Regras:**
+- 1 arquivo por tópico, slug em kebab-case (ex.: `escolha-de-tailwind.md`, `formato-do-registro.md`).
+- Sempre adicionar uma linha no `docs/CLAUDE.md` ao criar arquivo novo.
+- Sempre remover/atualizar a linha do índice ao deletar/renomear.
+- Doc mentirosa é pior que doc ausente — corrigir ou apagar.
 
 ## GIT Usage
 
