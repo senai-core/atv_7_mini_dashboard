@@ -3,17 +3,9 @@
 // =========================================================================
 
 const STORAGE_KEY = 'mulberry_music_data';
+const PROFILE_KEY = 'mulberry_profile';
 
-const dadosIniciais = [
-    { id: 1, nome: 'Tempo Ruim - A Arte do Insulto', album: 'Matanza', artista: 'Matanza', genero: 'Countrycore', duracao: '2:43', ouvintes_mensais: 15420, url_imagem: 'https://i.scdn.co/image/ab67616d0000b27380d9d6384f5052b35e88966b' },
-    { id: 2, nome: 'Rust - Stronger Than Death', album: 'Black Label Society', artista: 'Black Label Society', genero: 'Heavy Metal', duracao: '6:08', ouvintes_mensais: 28350, url_imagem: 'https://picsum.photos/seed/blacklabel/300/300' },
-    { id: 3, nome: 'Ainda Bem - O Que Você Quer Saber de Verdade', album: 'Marisa Monte', artista: 'Marisa Monte', genero: 'MPB', duracao: '3:35', ouvintes_mensais: 89200, url_imagem: 'https://picsum.photos/seed/marisa/300/300' },
-    { id: 4, nome: 'Little Wing - Axis: Bold As Love', album: 'Jimi Hendrix', artista: 'Jimi Hendrix', genero: 'Blues', duracao: '2:25', ouvintes_mensais: 456700, url_imagem: 'https://picsum.photos/seed/hendrix/300/300' },
-    { id: 5, nome: 'Domingas - Jorge Ben', album: 'Jorge Ben', artista: 'Jorge Ben Jor', genero: 'MPB', duracao: '3:31', ouvintes_mensais: 128900, url_imagem: 'https://picsum.photos/seed/jorgeben/300/300' },
-    { id: 6, nome: "10's - The Great Southern Trendkill", album: 'Pantera', artista: 'Pantera', genero: 'Groove Metal', duracao: '4:50', ouvintes_mensais: 67800, url_imagem: 'https://picsum.photos/seed/pantera/300/300' },
-    { id: 7, nome: 'One Last Breath - Weathered', album: 'Creed', artista: 'Creed', genero: 'Grunge', duracao: '3:58', ouvintes_mensais: 345600, url_imagem: 'https://picsum.photos/seed/creed/300/300' },
-    { id: 8, nome: 'Black - Ten', album: 'Pearl Jam', artista: 'Pearl Jam', genero: 'Grunge', duracao: '5:42', ouvintes_mensais: 512400, url_imagem: 'https://picsum.photos/seed/pearljam/300/300' },
-];
+const PROFILE_DEFAULT = { name: 'Éwerton Cercal', avatarUrl: '' };
 
 const PALETA_GRAFICO = [
     'rgba(216, 180, 254, 0.85)',
@@ -26,7 +18,8 @@ const PALETA_GRAFICO = [
     'rgba(236, 72, 153, 0.85)',
 ];
 
-let musicas = carregarDoStorage();
+let musicas = [];
+let profile = { ...PROFILE_DEFAULT };
 let generoSelecionado = 'todos';
 let termoBusca = '';
 let chart = null;
@@ -35,16 +28,36 @@ let chart = null;
 // Lógica
 // =========================================================================
 
-function carregarDoStorage() {
+async function carregarMusicas() {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
         return JSON.parse(stored);
     }
-    return [...dadosIniciais];
+    try {
+        const response = await fetch('dados.json');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        const lista = Array.isArray(data) ? data : (data.musicas || []);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+        return lista;
+    } catch (error) {
+        console.error('Erro ao carregar dados.json (sirva via http://, não file://):', error);
+        return [];
+    }
 }
 
-function persistir() {
+function carregarProfile() {
+    const stored = localStorage.getItem(PROFILE_KEY);
+    if (stored) return JSON.parse(stored);
+    return { ...PROFILE_DEFAULT };
+}
+
+function persistirMusicas() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(musicas));
+}
+
+function persistirProfile() {
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
 }
 
 function filtrar() {
@@ -127,6 +140,14 @@ function gerarDadosGrafico() {
     return itens;
 }
 
+function listarGeneros() {
+    const set = new Set();
+    for (let i = 0; i < musicas.length; i++) {
+        set.add(musicas[i].genero);
+    }
+    return ['todos', ...Array.from(set).sort((a, b) => a.localeCompare(b))];
+}
+
 // =========================================================================
 // Interface
 // =========================================================================
@@ -135,6 +156,8 @@ function renderizarTudo() {
     renderizarCards();
     renderizarIndicadores();
     renderizarGrafico();
+    renderizarOpcoesFiltro();
+    renderizarPerfil();
 }
 
 function renderizarCards() {
@@ -299,30 +322,118 @@ function criarLegendaItem(item) {
     return wrapper;
 }
 
-function configurarEventos() {
-    const chips = document.querySelectorAll('.genre-btn');
-    for (let i = 0; i < chips.length; i++) {
-        chips[i].addEventListener('click', () => {
-            for (let j = 0; j < chips.length; j++) chips[j].classList.remove('active');
-            chips[i].classList.add('active');
-            generoSelecionado = chips[i].dataset.genero;
+function renderizarOpcoesFiltro() {
+    const dd = document.getElementById('filterDropdown');
+    dd.replaceChildren();
+    const generos = listarGeneros();
+    for (let i = 0; i < generos.length; i++) {
+        const g = generos[i];
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'filter-option';
+        if (g === generoSelecionado) btn.classList.add('active');
+        btn.textContent = g === 'todos' ? 'Todos' : g;
+        btn.dataset.genero = g;
+        btn.addEventListener('click', () => {
+            generoSelecionado = g;
             renderizarCards();
+            renderizarOpcoesFiltro();
+            fecharFilterDropdown();
         });
+        dd.appendChild(btn);
     }
+}
 
+function abrirFilterDropdown() {
+    document.getElementById('filterDropdown').classList.add('show');
+    document.getElementById('filterBtn').setAttribute('aria-expanded', 'true');
+}
+
+function fecharFilterDropdown() {
+    document.getElementById('filterDropdown').classList.remove('show');
+    document.getElementById('filterBtn').setAttribute('aria-expanded', 'false');
+}
+
+function renderizarPerfil() {
+    const img = document.getElementById('profileAvatar');
+    const fb = document.getElementById('profileAvatarFallback');
+    if (profile.avatarUrl) {
+        img.src = profile.avatarUrl;
+        img.hidden = false;
+        fb.hidden = true;
+    } else {
+        img.removeAttribute('src');
+        img.hidden = true;
+        fb.hidden = false;
+    }
+}
+
+function preencherFormProfile() {
+    document.getElementById('pName').value = profile.name;
+    document.getElementById('pAvatar').value = profile.avatarUrl;
+    atualizarPreviewProfile(profile.avatarUrl);
+}
+
+function atualizarPreviewProfile(url) {
+    const img = document.getElementById('profilePreviewImg');
+    const fb = document.getElementById('profilePreviewFallback');
+    if (url) {
+        img.src = url;
+        img.hidden = false;
+        fb.hidden = true;
+    } else {
+        img.removeAttribute('src');
+        img.hidden = true;
+        fb.hidden = false;
+    }
+}
+
+function abrirModal(id) {
+    document.getElementById(id).classList.add('show');
+}
+
+function fecharModal(id) {
+    document.getElementById(id).classList.remove('show');
+}
+
+function configurarModal(modalId, openBtnId, closeBtnId) {
+    const modal = document.getElementById(modalId);
+    document.getElementById(openBtnId).addEventListener('click', () => abrirModal(modalId));
+    document.getElementById(closeBtnId).addEventListener('click', () => fecharModal(modalId));
+    modal.querySelector('.modal-overlay').addEventListener('click', () => fecharModal(modalId));
+}
+
+function configurarEventos() {
+    // Filter dropdown
+    document.getElementById('filterBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const dd = document.getElementById('filterDropdown');
+        if (dd.classList.contains('show')) fecharFilterDropdown();
+        else abrirFilterDropdown();
+    });
+    document.addEventListener('click', (e) => {
+        const wrapper = document.querySelector('.filter-wrapper');
+        if (wrapper && !wrapper.contains(e.target)) fecharFilterDropdown();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            fecharFilterDropdown();
+            fecharModal('addMusicModal');
+            fecharModal('profileModal');
+        }
+    });
+
+    // Search
     document.getElementById('searchInput').addEventListener('input', (e) => {
         termoBusca = e.target.value;
         renderizarCards();
     });
 
-    const modal = document.getElementById('addMusicModal');
-    document.getElementById('addMusicBtn').addEventListener('click', () => modal.classList.add('show'));
-    document.getElementById('closeModal').addEventListener('click', () => modal.classList.remove('show'));
-    modal.querySelector('.modal-overlay').addEventListener('click', () => modal.classList.remove('show'));
-
-    const form = document.getElementById('addMusicForm');
-    form.addEventListener('submit', (e) => {
+    // Add-music modal
+    configurarModal('addMusicModal', 'addMusicBtn', 'closeAddMusic');
+    document.getElementById('addMusicForm').addEventListener('submit', (e) => {
         e.preventDefault();
+        const form = e.target;
         const data = new FormData(form);
         const nova = {
             id: Date.now(),
@@ -335,12 +446,36 @@ function configurarEventos() {
             url_imagem: data.get('url_imagem') || '',
         };
         musicas.push(nova);
-        persistir();
+        persistirMusicas();
         renderizarTudo();
         form.reset();
-        modal.classList.remove('show');
+        fecharModal('addMusicModal');
+    });
+
+    // Profile modal
+    configurarModal('profileModal', 'profileBtn', 'closeProfileModal');
+    document.getElementById('profileBtn').addEventListener('click', preencherFormProfile);
+    document.getElementById('pAvatar').addEventListener('input', (e) => {
+        atualizarPreviewProfile(e.target.value);
+    });
+    document.getElementById('profileForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        profile = {
+            name: data.get('name'),
+            avatarUrl: data.get('avatarUrl') || '',
+        };
+        persistirProfile();
+        renderizarPerfil();
+        fecharModal('profileModal');
     });
 }
 
-renderizarTudo();
-configurarEventos();
+async function init() {
+    musicas = await carregarMusicas();
+    profile = carregarProfile();
+    renderizarTudo();
+    configurarEventos();
+}
+
+init();
