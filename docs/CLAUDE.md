@@ -25,7 +25,7 @@ Memória de longo prazo do projeto. Decisões, contexto e documentação de cód
 
 ### Decisões (`decisions/`)
 
-_Vazio. Adicione entradas aqui conforme o projeto evoluir._
+- [dashboard-baseline.md](decisions/dashboard-baseline.md) — escolhas de layout, filtros, perfil, dados e renderização do dashboard Mulberry.
 
 ### Código (`code/`)
 

@@ -35,3 +35,7 @@ build/
 .claude/plans/
 .claude/settings.local.json
 .claude/.session/
+
+# Music seed — versionado uma vez, depois marcado com --skip-worktree
+# pra que mudanças locais não virem commit. Veja README.
+dados.json

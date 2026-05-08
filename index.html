@@ -15,9 +15,9 @@
         <div class="vignette"></div>
     </div>
 
-    <div class="main-container flex flex-col lg:flex-row min-h-screen p-4 lg:p-8 gap-6">
-        <main class="main-content w-full lg:w-3/4">
-            <header class="header mb-8 flex items-center justify-between">
+    <div class="main-container flex flex-col lg:flex-row lg:h-screen lg:overflow-hidden p-4 lg:p-8 gap-6">
+        <main class="main-content w-full lg:w-3/4 flex flex-col lg:h-full lg:min-h-0">
+            <header class="header mb-8 shrink-0">
                 <div class="logo-container flex items-center gap-3">
                     <div class="logo-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-purple-300 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]">
@@ -26,39 +26,39 @@
                     </div>
                     <h1 class="logo-text text-3xl font-bold tracking-[0.15em] text-purple-300 drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]">MULBERRY</h1>
                 </div>
-                <div class="user-avatar w-12 h-12 rounded-full bg-purple-800/50 border border-purple-400/30 flex items-center justify-center" aria-label="Usuário">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-purple-300">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                    </svg>
-                </div>
             </header>
 
-            <section class="filters-container flex flex-wrap items-center gap-4 mb-8" aria-label="Filtros">
-                <div class="filter-label flex items-center gap-2 px-5 py-3 rounded-[20px] bg-purple-900/40 backdrop-blur-md border border-purple-500/30 shadow-[0_0_20px_rgba(147,51,234,0.3)]">
-                    <span class="text-white font-medium">Filtro</span>
-                    <div class="arrow-icon w-6 h-6 rounded-full bg-purple-400/30 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-purple-200">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            <section class="filters-container flex items-center gap-3 mb-8 shrink-0" aria-label="Filtros">
+                <div class="filter-wrapper relative shrink-0">
+                    <button id="filterBtn" type="button" class="filter-trigger flex items-center gap-2 px-5 py-3 rounded-[20px] bg-purple-900/40 backdrop-blur-md border border-purple-500/30 shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(147,51,234,0.5)] transition-all duration-300" aria-haspopup="menu" aria-expanded="false">
+                        <span class="text-white font-medium">Filtros</span>
+                        <div class="arrow-icon w-6 h-6 rounded-full bg-purple-400/30 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-purple-200">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="filterDropdown" class="filter-dropdown" role="menu"></div>
+                </div>
+
+                <div class="search-wrapper flex-1 flex items-center gap-2 px-3 py-1 rounded-full bg-purple-900/40 backdrop-blur-md border border-purple-500/30 transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-purple-300/70 shrink-0 ml-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Buscar música, artista, gênero..." class="search-input flex-1 min-w-0 px-1 py-2 bg-transparent text-white placeholder-purple-300/50 focus:outline-none" aria-label="Buscar">
+                    <button id="profileBtn" type="button" class="profile-trigger w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-purple-800/60 border border-purple-400/40 hover:scale-105 hover:shadow-[0_0_15px_rgba(168,85,247,0.5)] transition-all duration-300 shrink-0" aria-label="Editar perfil">
+                        <img id="profileAvatar" alt="" class="w-full h-full object-cover" hidden>
+                        <svg id="profileAvatarFallback" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-purple-200">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                         </svg>
-                    </div>
-                </div>
-
-                <div class="genre-buttons flex flex-wrap gap-3" id="genreButtons">
-                    <button class="genre-btn px-6 py-2 rounded-full bg-purple-900/50 text-white font-medium hover:bg-purple-800/60 transition-all duration-300" data-genero="Blues">Blues</button>
-                    <button class="genre-btn px-6 py-2 rounded-full bg-purple-900/50 text-white font-medium hover:bg-purple-800/60 transition-all duration-300" data-genero="MPB">MPB</button>
-                    <button class="genre-btn px-6 py-2 rounded-full bg-purple-900/50 text-white font-medium hover:bg-purple-800/60 transition-all duration-300" data-genero="Groove Metal">Groove Metal</button>
-                    <button class="genre-btn active px-6 py-2 rounded-full bg-purple-900/80 text-white font-medium border border-pink-400/50 shadow-[0_0_15px_rgba(236,72,153,0.4)] hover:shadow-[0_0_20px_rgba(236,72,153,0.6)] transition-all duration-300" data-genero="todos">Todos</button>
-                </div>
-
-                <div class="search-box ml-auto">
-                    <input type="text" id="searchInput" placeholder="Buscar música, artista..." class="search-input w-64 px-4 py-2 rounded-full bg-purple-900/40 backdrop-blur-md border border-purple-500/30 text-white placeholder-purple-300/50 focus:outline-none focus:border-pink-400/50 focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] transition-all duration-300" aria-label="Buscar">
+                    </button>
                 </div>
             </section>
 
-            <section class="music-grid" id="musicGrid" aria-label="Lista de músicas"></section>
+            <section class="music-grid lg:flex-1 lg:overflow-y-auto lg:min-h-0 lg:pr-2" id="musicGrid" aria-label="Lista de músicas"></section>
         </main>
 
-        <aside class="sidebar w-full lg:w-1/4">
+        <aside class="sidebar w-full lg:w-1/4 lg:h-full lg:overflow-y-auto lg:min-h-0">
             <div class="sidebar-content flex flex-col gap-6">
                 <button id="addMusicBtn" class="add-music-btn w-full py-4 rounded-[25px] bg-purple-900/50 backdrop-blur-md border border-purple-500/30 shadow-[0_0_25px_rgba(147,51,234,0.4)] hover:shadow-[0_0_35px_rgba(147,51,234,0.6)] hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3">
                     <div class="plus-icon w-10 h-10 rounded-[12px] bg-purple-400/30 flex items-center justify-center">
@@ -106,12 +106,12 @@
         AT07 — Mulberry Dashboard · vanilla HTML/CSS/JS
     </footer>
 
-    <div id="addMusicModal" class="modal hidden" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+    <div id="addMusicModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
         <div class="modal-overlay"></div>
         <div class="modal-content p-8 rounded-[30px] bg-purple-950/90 backdrop-blur-xl border border-purple-500/40 shadow-[0_0_50px_rgba(147,51,234,0.5)] max-w-md w-full mx-4">
             <div class="modal-header flex justify-between items-center mb-6">
                 <h2 id="modalTitle" class="text-2xl font-bold text-white tracking-wide">Adicionar Música</h2>
-                <button id="closeModal" class="close-btn w-10 h-10 rounded-full bg-purple-800/50 hover:bg-purple-700/60 flex items-center justify-center transition-all duration-300" aria-label="Fechar">
+                <button id="closeAddMusic" class="close-btn w-10 h-10 rounded-full bg-purple-800/50 hover:bg-purple-700/60 flex items-center justify-center transition-all duration-300" aria-label="Fechar">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-white">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -158,6 +158,41 @@
                 </div>
                 <button type="submit" class="submit-btn w-full py-4 mt-4 rounded-[20px] bg-gradient-to-r from-purple-700 to-pink-600 text-white font-bold text-lg hover:shadow-[0_0_25px_rgba(236,72,153,0.5)] hover:scale-[1.02] transition-all duration-300">
                     Adicionar Música
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal" role="dialog" aria-labelledby="profileModalTitle" aria-modal="true">
+        <div class="modal-overlay"></div>
+        <div class="modal-content p-8 rounded-[30px] bg-purple-950/90 backdrop-blur-xl border border-purple-500/40 shadow-[0_0_50px_rgba(147,51,234,0.5)] max-w-md w-full mx-4">
+            <div class="modal-header flex justify-between items-center mb-6">
+                <h2 id="profileModalTitle" class="text-2xl font-bold text-white tracking-wide">Editar Perfil</h2>
+                <button id="closeProfileModal" class="close-btn w-10 h-10 rounded-full bg-purple-800/50 hover:bg-purple-700/60 flex items-center justify-center transition-all duration-300" aria-label="Fechar">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <form id="profileForm" class="space-y-5">
+                <div class="profile-preview flex justify-center mb-4">
+                    <div class="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center bg-purple-800/50 border-2 border-purple-400/40">
+                        <img id="profilePreviewImg" alt="" class="w-full h-full object-cover" hidden>
+                        <svg id="profilePreviewFallback" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-purple-300">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-purple-200 mb-2 font-medium" for="pName">Nome</label>
+                    <input id="pName" type="text" name="name" required class="form-input w-full px-4 py-3 rounded-[15px]">
+                </div>
+                <div>
+                    <label class="block text-purple-200 mb-2 font-medium" for="pAvatar">URL da Imagem</label>
+                    <input id="pAvatar" type="url" name="avatarUrl" placeholder="https://..." class="form-input w-full px-4 py-3 rounded-[15px]">
+                </div>
+                <button type="submit" class="submit-btn w-full py-4 mt-4 rounded-[20px] bg-gradient-to-r from-purple-700 to-pink-600 text-white font-bold text-lg hover:shadow-[0_0_25px_rgba(236,72,153,0.5)] hover:scale-[1.02] transition-all duration-300">
+                    Salvar
                 </button>
             </form>
         </div>
