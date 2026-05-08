@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MULBERRY - Dashboard de Músicas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="page-bg">
+        <div class="bg-gradient"></div>
+        <div class="radial-glow"></div>
+        <div class="vignette"></div>
+    </div>
+
+    <div class="main-container flex flex-col lg:flex-row min-h-screen p-4 lg:p-8 gap-6">
+        <main class="main-content w-full lg:w-3/4">
+            <header class="header mb-8">
+                <div class="logo-container flex items-center gap-3">
+                    <div class="logo-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-purple-300 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]">
+                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                        </svg>
+                    </div>
+                    <h1 class="logo-text text-3xl font-bold tracking-[0.15em] text-purple-300 drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]">MULBERRY</h1>
+                </div>
+            </header>
+
+            <section class="filters-container flex flex-wrap items-center gap-4 mb-8">
+                <button id="filterBtn" class="filter-btn flex items-center gap-2 px-5 py-3 rounded-[20px] bg-purple-900/40 backdrop-blur-md border border-purple-500/30 shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(147,51,234,0.5)] transition-all duration-300">
+                    <span class="text-white font-medium">Filtro</span>
+                    <div class="arrow-icon w-6 h-6 rounded-full bg-purple-400/30 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-purple-200">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </div>
+                </button>
+
+                <div class="genre-buttons flex flex-wrap gap-3" id="genreButtons">
+                    <button class="genre-btn px-6 py-2 rounded-full bg-purple-900/50 text-white font-medium hover:bg-purple-800/60 transition-all duration-300" data-genero="Blues">Blues</button>
+                    <button class="genre-btn px-6 py-2 rounded-full bg-purple-900/50 text-white font-medium hover:bg-purple-800/60 transition-all duration-300" data-genero="MPB">MPB</button>
+                    <button class="genre-btn px-6 py-2 rounded-full bg-purple-900/50 text-white font-medium hover:bg-purple-800/60 transition-all duration-300" data-genero="Groove Metal">Groove Metal</button>
+                    <button class="genre-btn active px-6 py-2 rounded-full bg-purple-900/80 text-white font-medium border border-pink-400/50 shadow-[0_0_15px_rgba(236,72,153,0.4)] hover:shadow-[0_0_20px_rgba(236,72,153,0.6)] transition-all duration-300" data-genero="todos">Todos</button>
+                </div>
+
+                <div class="search-box ml-auto">
+                    <input type="text" id="searchInput" placeholder="Buscar música, artista..." class="search-input w-64 px-4 py-2 rounded-full bg-purple-900/40 backdrop-blur-md border border-purple-500/30 text-white placeholder-purple-300/50 focus:outline-none focus:border-pink-400/50 focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] transition-all duration-300">
+                </div>
+            </section>
+
+            <section class="music-grid" id="musicGrid">
+            </section>
+        </main>
+
+        <aside class="sidebar w-full lg:w-1/4">
+            <div class="sidebar-content flex flex-col gap-6">
+                <button id="addMusicBtn" class="add-music-btn w-full py-4 rounded-[25px] bg-purple-900/50 backdrop-blur-md border border-purple-500/30 shadow-[0_0_25px_rgba(147,51,234,0.4)] hover:shadow-[0_0_35px_rgba(147,51,234,0.6)] hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3">
+                    <div class="plus-icon w-10 h-10 rounded-[12px] bg-purple-400/30 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-purple-200">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                    </div>
+                    <span class="text-white font-semibold text-lg tracking-wide">ADICIONAR MÚSICA</span>
+                </button>
+
+                <div class="profile-block p-6 rounded-[30px] bg-purple-900/40 backdrop-blur-md border border-purple-500/30 shadow-[0_0_20px_rgba(147,51,234,0.3)]">
+                    <div class="profile-header flex flex-col items-center gap-4">
+                        <div class="profile-avatar w-24 h-24 rounded-full bg-purple-800/50 border-2 border-purple-400/30 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-purple-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                            </svg>
+                        </div>
+                        <div class="user-name px-6 py-2 rounded-full bg-purple-700/40 border border-purple-400/30">
+                            <span id="userName" class="text-white font-bold text-lg">Éwerton Cercal</span>
+                        </div>
+                        <button id="genreSheetBtn" class="w-full py-3 rounded-[20px] bg-purple-200/20 text-purple-300 font-medium hover:bg-purple-200/30 transition-all duration-300">
+                            Planilha de Gêneros
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chart-block p-6 rounded-[30px] bg-purple-900/40 backdrop-blur-md border border-purple-500/30 shadow-[0_0_20px_rgba(147,51,234,0.3)]">
+                    <h3 class="chart-title text-center text-white text-lg font-semibold mb-6 tracking-wide">Planilha de Gêneros</h3>
+                    <div class="chart-container relative w-48 h-48 mx-auto">
+                        <canvas id="genreChart"></canvas>
+                    </div>
+                    <div class="chart-legend mt-6 space-y-2" id="chartLegend">
+                    </div>
+                </div>
+
+                <div class="total-block p-6 rounded-[30px] bg-purple-900/40 backdrop-blur-md border border-purple-500/30 shadow-[0_0_20px_rgba(147,51,234,0.3)]">
+                    <p class="total-label text-center text-white text-lg mb-4">Total de músicas salvas</p>
+                    <div class="total-content flex items-center justify-center gap-4">
+                        <div class="total-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-purple-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.182l2.109-.602A9.062 9.062 0 0 1 12 21.75a9.062 9.062 0 0 1-6-2.108m0-12.553v3.75a2.25 2.25 0 0 0 1.632 2.163l1.32.377a1.803 1.803 0 0 0 .99-3.182l-2.109-.602A9.062 9.062 0 0 0 12 2.25a9.062 9.062 0 0 0 6 2.108" />
+                            </svg>
+                        </div>
+                        <span id="totalMusics" class="total-number text-5xl font-bold text-purple-200 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]">0</span>
+                    </div>
+                    <div class="stats-grid mt-6 grid grid-cols-2 gap-4">
+                        <div class="stat-item text-center">
+                            <p class="stat-label text-purple-300/70 text-sm">Duração Total</p>
+                            <p id="totalDuration" class="stat-value text-white font-semibold">00:00</p>
+                        </div>
+                        <div class="stat-item text-center">
+                            <p class="stat-label text-purple-300/70 text-sm">Ouvintes Mensais</p>
+                            <p id="totalListeners" class="stat-value text-white font-semibold">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <div id="addMusicModal" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content p-8 rounded-[30px] bg-purple-950/90 backdrop-blur-xl border border-purple-500/40 shadow-[0_0_50px_rgba(147,51,234,0.5)] max-w-md w-full mx-4">
+            <div class="modal-header flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white tracking-wide">Adicionar Música</h2>
+                <button id="closeModal" class="close-btn w-10 h-10 rounded-full bg-purple-800/50 hover:bg-purple-700/60 flex items-center justify-center transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <form id="addMusicForm" class="space-y-5">
+                <div>
+                    <label class="block text-purple-200 mb-2 font-medium">Nome da Música</label>
+                    <input type="text" name="nome" required class="w-full px-4 py-3 rounded-[15px] bg-purple-900/50 border border-purple-500/30 text-white placeholder-purple-300/50 focus:outline-none focus:border-pink-400/50 focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] transition-all duration-300">
+                </div>
+                <div>
+                    <label class="block text-purple-200 mb-2 font-medium">Álbum</label>
+                    <input type="text" name="album" required class="w-full px-4 py-3 rounded-[15px] bg-purple-900/50 border border-purple-500/30 text-white placeholder-purple-300/50 focus:outline-none focus:border-pink-400/50 focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] transition-all duration-300">
+                </div>
+                <div>
+                    <label class="block text-purple-200 mb-2 font-medium">Artista</label>
+                    <input type="text" name="artista" required class="w-full px-4 py-3 rounded-[15px] bg-purple-900/50 border border-purple-500/30 text-white placeholder-purple-300/50 focus:outline-none focus:border-pink-400/50 focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] transition-all duration-300">
+                </div>
+                <div>
+                    <label class="block text-purple-200 mb-2 font-medium">Gênero</label>
+                    <select name="genero" required class="w-full px-4 py-3 rounded-[15px] bg-purple-900/50 border border-purple-500/30 text-white focus:outline-none focus:border-pink-400/50 focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] transition-all duration-300">
+                        <option value="" class="bg-purple-900">Selecione...</option>
+                        <option value="Blues" class="bg-purple-900">Blues</option>
+                        <option value="MPB" class="bg-purple-900">MPB</option>
+                        <option value="Rock" class="bg-purple-900">Rock</option>
+                        <option value="Metal" class="bg-purple-900">Metal</option>
+                        <option value="Grunge" class="bg-purple-900">Grunge</option>
+                        <option value="Heavy Metal" class="bg-purple-900">Heavy Metal</option>
+                        <option value="Groove Metal" class="bg-purple-900">Groove Metal</option>
+                        <option value="Countrycore" class="bg-purple-900">Countrycore</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-purple-200 mb-2 font-medium">Duração (mm:ss)</label>
+                    <input type="text" name="duracao" placeholder="3:45" required pattern="[0-9]+:[0-5][0-9]" class="w-full px-4 py-3 rounded-[15px] bg-purple-900/50 border border-purple-500/30 text-white placeholder-purple-300/50 focus:outline-none focus:border-pink-400/50 focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] transition-all duration-300">
+                </div>
+                <div>
+                    <label class="block text-purple-200 mb-2 font-medium">Ouvintes Mensais</label>
+                    <input type="number" name="ouvintes_mensais" required min="0" class="w-full px-4 py-3 rounded-[15px] bg-purple-900/50 border border-purple-500/30 text-white placeholder-purple-300/50 focus:outline-none focus:border-pink-400/50 focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] transition-all duration-300">
+                </div>
+                <div>
+                    <label class="block text-purple-200 mb-2 font-medium">URL da Imagem</label>
+                    <input type="url" name="url_imagem" placeholder="https://..." class="w-full px-4 py-3 rounded-[15px] bg-purple-900/50 border border-purple-500/30 text-white placeholder-purple-300/50 focus:outline-none focus:border-pink-400/50 focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] transition-all duration-300">
+                </div>
+                <button type="submit" class="submit-btn w-full py-4 mt-4 rounded-[20px] bg-gradient-to-r from-purple-700 to-pink-600 text-white font-bold text-lg hover:shadow-[0_0_25px_rgba(236,72,153,0.5)] hover:scale-[1.02] transition-all duration-300">
+                    Adicionar Música
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
