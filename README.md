@@ -8,31 +8,30 @@ AT07 (SENAI) — Dashboard interativo em HTML + CSS + JavaScript puro com persis
 - CSS3 + Tailwind via CDN
 - JavaScript vanilla (ES6+, sem build tools)
 - [Chart.js](https://www.chartjs.org/) via CDN — donut chart de gêneros
-- Google Fonts (Cinzel) — tipografia
-- Persistência: `localStorage`
+- Google Fonts (Italiana, Hanken Grotesk, Kode Mono) — tipografia editorial
+- Persistência: `localStorage` (chave única `mulberry_state`)
 
 ## Como rodar
 
-`fetch('dados.json')` não funciona via `file://` (CORS no protocolo). Sirva por HTTP local:
+Abrir o `index.html` direto no browser funciona — não tem fetch nem dependência de servidor.
 
 ```bash
 git clone https://github.com/senai-core/atv_7_mini_dashboard.git
 cd atv_7_mini_dashboard
-python3 -m http.server 8765
+xdg-open index.html      # Linux
+open index.html          # macOS
+start index.html         # Windows
 ```
 
-Abra `http://localhost:8765` no browser.
-
-> Alternativa: extensão "Live Server" no VS Code, `npx serve`, etc.
+> Se preferir HTTP local: `python3 -m http.server 8765` e abre `http://localhost:8765`.
 
 ## Estrutura
 
 ```
 .
 ├── index.html           # markup semântico + modais (add música, perfil)
-├── style.css            # paleta + animações + responsivo
+├── style.css            # paleta editorial + responsivo
 ├── script.js            # 3 seções: Dados/Estado | Lógica | Interface
-├── dados.json           # seed das músicas (skip-worktree, ver abaixo)
 ├── docs/
 │   ├── CLAUDE.md        # índice da pasta docs
 │   ├── teacher-task.md  # rubrica oficial do AT07
@@ -40,34 +39,32 @@ Abra `http://localhost:8765` no browser.
 └── README.md
 ```
 
-## Sobre o `dados.json`
+## Persistência
 
-`dados.json` é versionado uma única vez (vai pra GitHub, qualquer `git clone` recebe o seed). Mas localmente é tratado como **read-only** via `git update-index --skip-worktree`, pra que modificações pessoais (músicas adicionadas, etc.) não poluam commits.
+Tudo vive em **`localStorage`** sob uma única chave: `mulberry_state`.
 
-**Após clonar pela primeira vez**, marca o arquivo:
-
-```bash
-git update-index --skip-worktree dados.json
+```jsonc
+// localStorage["mulberry_state"]
+{
+  "musicas": [ /* array de objetos das músicas */ ],
+  "profile": { "name": "Visitante", "avatarUrl": "" }
+}
 ```
 
-**Pra parar de ignorar** (ex.: você quer commitar uma atualização do seed):
+- **1º load** (storage vazio) → carrega o seed hardcoded em `script.js` (8 músicas + perfil padrão).
+- **Edita perfil ou adiciona música** → grava em `localStorage`.
+- **Reload** → lê de `localStorage`, não toca no seed.
+- **Resetar** → DevTools → Application → Local Storage → deleta a chave `mulberry_state`. Reload mostra o seed de novo.
 
-```bash
-git update-index --no-skip-worktree dados.json
-git add dados.json
-git commit -m "chore: update music seed"
-git update-index --skip-worktree dados.json
-```
-
-> Ele também aparece no `.gitignore` como nota de intenção, mas o flag de skip-worktree é o que efetivamente impede o tracking — gitignore não desresgatra arquivos já trackeados.
+> Sem `dados.json`, sem `fetch`, sem `async/await`. Tudo síncrono e sem dependência de servidor. JS estático em browser não tem permissão pra escrever em arquivo do disco — `localStorage` é o único caminho de persistência vanilla.
 
 ## Funcionalidades
 
-- **Listagem** em grid responsivo (4→3→2→1 colunas conforme largura)
+- **Listagem** em grid responsivo (auto-fill, mantém tamanho do card mesmo com 1 resultado)
 - **Filtro por gênero** via dropdown dinâmico (gera opções a partir das músicas atuais)
 - **Busca** por nome, artista ou gênero
 - **Adicionar música** (modal — `push()` no array + `localStorage`)
-- **Editar perfil** (nome + avatar via URL — salvo em `localStorage` como JSON)
+- **Editar perfil** (nome + avatar via URL — salvo no mesmo `mulberry_state`)
 - **Indicadores calculados**: total de músicas, duração total, ouvintes/mês
 - **Donut chart** com distribuição de gêneros
 - **Layout viewport-locked no desktop** — só a lista de músicas scrolla; header, filtros e sidebar ficam fixos
