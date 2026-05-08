@@ -31,6 +31,7 @@ let musicas = carregarDoStorage();
 let generoSelecionado = 'todos';
 let termoBusca = '';
 let chart = null;
+let musicaParaExcluir = null;
 
 // =========================================================================
 // Lógica
@@ -226,6 +227,19 @@ function criarCard(musica) {
     const duracaoText = document.createElement('span');
     duracaoText.textContent = musica.duracao;
     duracaoBox.appendChild(duracaoText);
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-btn';
+    deleteBtn.setAttribute('aria-label', `Excluir ${musica.nome}`);
+    deleteBtn.dataset.id = musica.id;
+    deleteBtn.appendChild(criarIconeLixeira());
+    deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        musicaParaExcluir = musica.id;
+        document.getElementById('deleteWarningText').textContent = `Tem certeza que deseja excluir "${musica.nome}" de ${musica.artista}?`;
+        document.getElementById('deleteModal').classList.add('show');
+    });
+    duracaoBox.appendChild(deleteBtn);
     card.appendChild(duracaoBox);
 
     return card;
@@ -258,6 +272,25 @@ function criarIconeRelogio() {
     path.setAttribute('stroke-linejoin', 'round');
     path.setAttribute('d', 'M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z');
     svg.appendChild(path);
+    return svg;
+}
+
+function criarIconeLixeira() {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '1.5');
+    const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path1.setAttribute('stroke-linecap', 'round');
+    path1.setAttribute('stroke-linejoin', 'round');
+    path1.setAttribute('d', 'M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m-7 5v6m4-6v6');
+    svg.appendChild(path1);
+    const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path2.setAttribute('stroke-linecap', 'round');
+    path2.setAttribute('stroke-linejoin', 'round');
+    path2.setAttribute('d', 'M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6');
+    svg.appendChild(path2);
     return svg;
 }
 
@@ -390,6 +423,29 @@ function configurarEventos() {
         salvarPerfil(perfil);
         renderizarPerfil();
         profileModal.classList.remove('show');
+    });
+
+    const deleteModal = document.getElementById('deleteModal');
+    document.getElementById('closeDeleteModal').addEventListener('click', () => {
+        deleteModal.classList.remove('show');
+        musicaParaExcluir = null;
+    });
+    document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+        deleteModal.classList.remove('show');
+        musicaParaExcluir = null;
+    });
+    deleteModal.querySelector('.modal-overlay').addEventListener('click', () => {
+        deleteModal.classList.remove('show');
+        musicaParaExcluir = null;
+    });
+    document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+        if (musicaParaExcluir) {
+            musicas = musicas.filter((m) => m.id !== musicaParaExcluir);
+            persistir();
+            renderizarTudo();
+            deleteModal.classList.remove('show');
+            musicaParaExcluir = null;
+        }
     });
 }
 

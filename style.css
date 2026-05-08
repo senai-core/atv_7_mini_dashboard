@@ -664,6 +664,78 @@ a {
     color: var(--ink-muted);
 }
 
+.delete-btn {
+    opacity: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: var(--r-xs);
+    border: none;
+    background: transparent;
+    color: var(--ink-faint);
+    cursor: pointer;
+    transition: opacity var(--d-fast) var(--ease-out),
+                color var(--d-fast) var(--ease-out),
+                background var(--d-fast) var(--ease-out);
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.music-card:hover .delete-btn {
+    opacity: 1;
+}
+
+.delete-btn:hover {
+    color: oklch(0.85 0.18 30);
+    background: oklch(0.85 0.18 30 / 0.12);
+}
+
+.delete-btn svg {
+    width: 13px;
+    height: 13px;
+}
+
+.delete-warning {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--ink-secondary);
+    margin-bottom: var(--s-6);
+    line-height: 1.6;
+}
+
+.delete-actions {
+    display: flex;
+    gap: var(--s-3);
+}
+
+.delete-actions .submit-btn {
+    flex: 1;
+}
+
+.cancel-btn {
+    background: transparent !important;
+    border-color: var(--rule-strong) !important;
+    color: var(--ink-secondary) !important;
+}
+
+.cancel-btn:hover {
+    background: var(--ink-card-hover) !important;
+    border-color: var(--rule-active) !important;
+    color: var(--ink-primary) !important;
+}
+
+.confirm-delete-btn {
+    background: oklch(0.65 0.18 30) !important;
+    border-color: oklch(0.65 0.18 30) !important;
+}
+
+.confirm-delete-btn:hover {
+    background: oklch(0.55 0.20 30) !important;
+    border-color: oklch(0.55 0.20 30) !important;
+}
+
 /* Empty state */
 .empty-state {
     grid-column: 1 / -1;

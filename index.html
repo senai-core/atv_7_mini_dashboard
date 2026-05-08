@@ -214,6 +214,29 @@
         </div>
     </div>
 
+    <!-- Delete confirmation modal -->
+    <div id="deleteModal" class="modal" role="dialog" aria-labelledby="deleteModalTitle" aria-modal="true">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-heading">
+                    <p class="modal-eyebrow">Excluir</p>
+                    <h2 id="deleteModalTitle" class="modal-title">Remover registro</h2>
+                </div>
+                <button id="closeDeleteModal" class="close-btn" aria-label="Fechar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                        <path stroke-linecap="round" d="M6 18 18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <p class="delete-warning" id="deleteWarningText">Tem certeza que deseja excluir esta música?</p>
+            <div class="delete-actions">
+                <button id="cancelDeleteBtn" class="submit-btn cancel-btn">Cancelar</button>
+                <button id="confirmDeleteBtn" class="submit-btn confirm-delete-btn">Excluir</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
