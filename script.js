@@ -3,6 +3,7 @@
 // =========================================================================
 
 const STORAGE_KEY = 'mulberry_music_data';
+const PROFILE_STORAGE_KEY = 'mulberry_profile';
 
 const dadosIniciais = [
     { id: 1, nome: 'Tempo Ruim - A Arte do Insulto', album: 'Matanza', artista: 'Matanza', genero: 'Countrycore', duracao: '2:43', ouvintes_mensais: 15420, url_imagem: 'https://i.scdn.co/image/ab67616d0000b27380d9d6384f5052b35e88966b' },
@@ -45,6 +46,32 @@ function carregarDoStorage() {
 
 function persistir() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(musicas));
+}
+
+function carregarPerfil() {
+    const stored = localStorage.getItem(PROFILE_STORAGE_KEY);
+    if (stored) return JSON.parse(stored);
+    return { nome: 'você', avatarUrl: '' };
+}
+
+function salvarPerfil(perfil) {
+    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(perfil));
+}
+
+let perfil = carregarPerfil();
+
+function renderizarPerfil() {
+    document.getElementById('profileNameDisplay').textContent = perfil.nome;
+    const img = document.getElementById('profileAvatar');
+    const fallback = document.getElementById('profileAvatarFallback');
+    if (perfil.avatarUrl) {
+        img.src = perfil.avatarUrl;
+        img.hidden = false;
+        fallback.hidden = true;
+    } else {
+        img.hidden = true;
+        fallback.hidden = false;
+    }
 }
 
 function filtrar() {
@@ -340,7 +367,46 @@ function configurarEventos() {
         form.reset();
         modal.classList.remove('show');
     });
+
+    const profileModal = document.getElementById('profileModal');
+    document.getElementById('profileBtn').addEventListener('click', () => {
+        document.getElementById('pName').value = perfil.nome;
+        document.getElementById('pAvatar').value = perfil.avatarUrl;
+        atualizarPreviewPerfil();
+        profileModal.classList.add('show');
+    });
+    document.getElementById('closeProfileModal').addEventListener('click', () => profileModal.classList.remove('show'));
+    profileModal.querySelector('.modal-overlay').addEventListener('click', () => profileModal.classList.remove('show'));
+    document.getElementById('pAvatar').addEventListener('input', atualizarPreviewPerfil);
+
+    const profileForm = document.getElementById('profileForm');
+    profileForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(profileForm);
+        perfil = {
+            nome: data.get('name') || 'você',
+            avatarUrl: data.get('avatarUrl') || '',
+        };
+        salvarPerfil(perfil);
+        renderizarPerfil();
+        profileModal.classList.remove('show');
+    });
 }
 
+function atualizarPreviewPerfil() {
+    const url = document.getElementById('pAvatar').value;
+    const img = document.getElementById('profilePreviewImg');
+    const fallback = document.getElementById('profilePreviewFallback');
+    if (url) {
+        img.src = url;
+        img.hidden = false;
+        fallback.hidden = true;
+    } else {
+        img.hidden = true;
+        fallback.hidden = false;
+    }
+}
+
+renderizarPerfil();
 renderizarTudo();
 configurarEventos();
