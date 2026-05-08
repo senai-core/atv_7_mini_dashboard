@@ -50,11 +50,12 @@ async function carregarEstado() {
     }
 
     const seed = await carregarSeed();
+    const seedReal = seed.musicas && seed.musicas.length > 0;
     const musicasFinal = storedMusicas ? JSON.parse(storedMusicas) : (seed.musicas || []);
     const profileFinal = storedProfile ? JSON.parse(storedProfile) : { ...seed.user };
 
-    if (!storedMusicas) localStorage.setItem(STORAGE_KEY, JSON.stringify(musicasFinal));
-    if (!storedProfile) localStorage.setItem(PROFILE_KEY, JSON.stringify(profileFinal));
+    if (seedReal && !storedMusicas) localStorage.setItem(STORAGE_KEY, JSON.stringify(musicasFinal));
+    if (seedReal && !storedProfile) localStorage.setItem(PROFILE_KEY, JSON.stringify(profileFinal));
 
     return { musicas: musicasFinal, profile: profileFinal };
 }
@@ -364,6 +365,7 @@ function fecharFilterDropdown() {
 function renderizarPerfil() {
     const img = document.getElementById('profileAvatar');
     const fb = document.getElementById('profileAvatarFallback');
+    const nameEl = document.getElementById('profileNameDisplay');
     if (profile.avatarUrl) {
         img.src = profile.avatarUrl;
         img.hidden = false;
@@ -372,6 +374,9 @@ function renderizarPerfil() {
         img.removeAttribute('src');
         img.hidden = true;
         fb.hidden = false;
+    }
+    if (nameEl) {
+        nameEl.textContent = profile.name && profile.name.trim() ? profile.name : 'você';
     }
 }
 
