@@ -1,3 +1,6 @@
+/* =========================================================================
+   Tokens & Reset
+   ========================================================================= */
 :root {
     --purple-dark: #1b0828;
     --purple-medium: #2b0b45;
@@ -5,6 +8,7 @@
     --purple-neon: #6f2dbd;
     --purple-bright: #a855f7;
     --purple-glow: #d8b4fe;
+    --pink-accent: #ec4899;
 }
 
 * {
@@ -19,22 +23,20 @@ body {
     min-height: 100vh;
 }
 
+/* =========================================================================
+   Background — gradient + glow + vignette
+   ========================================================================= */
 .page-bg {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     z-index: -1;
     overflow: hidden;
 }
 
 .bg-gradient {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background: 
-        linear-gradient(135deg, #1b0828 0%, #2b0b45 25%, #47126b 50%, #6f2dbd 75%, #1b0828 100%);
+    inset: 0;
+    background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple-medium) 25%, var(--purple-light) 50%, var(--purple-neon) 75%, var(--purple-dark) 100%);
     background-size: 400% 400%;
     animation: gradientShift 15s ease infinite;
 }
@@ -64,24 +66,29 @@ body {
 
 .vignette {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: radial-gradient(ellipse at top left, transparent 40%, rgba(0, 0, 0, 0.4) 100%),
                 radial-gradient(ellipse at bottom right, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
 }
 
+/* =========================================================================
+   Header
+   ========================================================================= */
 .logo-text {
     font-family: 'Cinzel', serif;
     text-shadow: 0 0 20px rgba(168, 85, 247, 0.8), 0 0 40px rgba(147, 51, 234, 0.5);
 }
 
-.filter-btn {
+/* =========================================================================
+   Filters — chips + search
+   ========================================================================= */
+.filter-label {
     backdrop-filter: blur(10px);
 }
 
 .genre-btn.active {
     background: rgba(111, 45, 189, 0.8);
-    border-color: rgba(236, 172, 184, 0.5);
+    border: 1px solid rgba(236, 72, 153, 0.5);
     box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
 }
 
@@ -89,16 +96,13 @@ body {
     color: rgba(216, 180, 254, 0.5);
 }
 
+/* =========================================================================
+   Music grid — 3-col mockup default, responsive down
+   ========================================================================= */
 .music-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
-}
-
-@media (max-width: 1280px) {
-    .music-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
 }
 
 @media (max-width: 1024px) {
@@ -120,14 +124,14 @@ body {
     border-radius: 20px;
     padding: 1rem;
     box-shadow: 0 8px 32px rgba(147, 51, 234, 0.2);
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     cursor: pointer;
 }
 
 .music-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 40px rgba(147, 51, 234, 0.4), 0 0 20px rgba(168, 85, 247, 0.3);
-    border-color: rgba(236, 172, 184, 0.4);
+    border-color: rgba(236, 72, 153, 0.4);
 }
 
 .album-cover {
@@ -143,7 +147,7 @@ body {
     width: 100%;
     aspect-ratio: 1;
     border-radius: 15px;
-    background: linear-gradient(135deg, #47126b, #2b0b45);
+    background: linear-gradient(135deg, var(--purple-light), var(--purple-medium));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -186,25 +190,33 @@ body {
     font-size: 0.8rem;
 }
 
-.music-duration svg {
-    width: 14px;
-    height: 14px;
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: rgba(216, 180, 254, 0.7);
+    padding: 3rem 0;
+    font-size: 1.1rem;
 }
 
+/* =========================================================================
+   Sidebar — sticky
+   ========================================================================= */
 .sidebar-content {
     position: sticky;
     top: 2rem;
 }
 
-.sidebar {
-    backdrop-filter: blur(10px);
-}
-
+/* =========================================================================
+   Total + stats indicators
+   ========================================================================= */
 .total-number {
     font-family: 'Cinzel', serif;
     text-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
 }
 
+/* =========================================================================
+   Chart legend
+   ========================================================================= */
 .chart-legend {
     display: flex;
     flex-direction: column;
@@ -235,23 +247,23 @@ body {
 }
 
 .legend-value {
-    color: #d8b4fe;
+    color: var(--purple-glow);
     font-weight: 600;
 }
 
+/* =========================================================================
+   Modal — add music form
+   ========================================================================= */
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .modal.show {
@@ -261,10 +273,7 @@ body {
 
 .modal-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
 }
@@ -274,26 +283,39 @@ body {
     transition: transform 0.3s ease;
     position: relative;
     z-index: 1;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .modal.show .modal-content {
     transform: scale(1);
 }
 
-#addMusicForm input,
-#addMusicForm select {
+.form-input {
     background: rgba(111, 45, 189, 0.3);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    color: white;
+    transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
 }
 
-#addMusicForm input:focus,
-#addMusicForm select:focus {
+.form-input::placeholder {
+    color: rgba(216, 180, 254, 0.5);
+}
+
+.form-input:focus {
+    outline: none;
     background: rgba(111, 45, 189, 0.5);
+    border-color: rgba(236, 72, 153, 0.5);
+    box-shadow: 0 0 15px rgba(236, 72, 153, 0.3);
 }
 
 #addMusicForm select option {
-    background: #2b0b45;
+    background: var(--purple-medium);
 }
 
+/* =========================================================================
+   Scrollbar
+   ========================================================================= */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -313,15 +335,18 @@ body {
     background: rgba(168, 85, 247, 0.6);
 }
 
+/* =========================================================================
+   Responsive — sidebar collapse, filter wrap
+   ========================================================================= */
 @media (max-width: 1024px) {
     .main-container {
         flex-direction: column;
     }
-    
+
     .sidebar {
         width: 100%;
     }
-    
+
     .sidebar-content {
         position: static;
     }
@@ -332,22 +357,22 @@ body {
         flex-direction: column;
         align-items: stretch;
     }
-    
+
     .search-box {
         margin-left: 0;
         width: 100%;
     }
-    
+
     .search-input {
         width: 100%;
     }
-    
+
     .genre-buttons {
         overflow-x: auto;
         flex-wrap: nowrap;
         padding-bottom: 0.5rem;
     }
-    
+
     .genre-btn {
         white-space: nowrap;
     }
