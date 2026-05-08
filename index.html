@@ -3,196 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MULBERRY - Dashboard de Músicas</title>
+    <title>Mulberry — Um índice musical</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Italiana&family=Kode+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="page-bg">
-        <div class="bg-gradient"></div>
-        <div class="radial-glow"></div>
-        <div class="vignette"></div>
-    </div>
+    <div class="page-bg" aria-hidden="true"></div>
 
-    <div class="main-container flex flex-col lg:flex-row lg:h-screen lg:overflow-hidden p-4 lg:p-8 gap-6">
-        <main class="main-content w-full lg:w-3/4 flex flex-col lg:h-full lg:min-h-0">
-            <header class="header mb-8 shrink-0">
-                <div class="logo-container flex items-center gap-3">
-                    <div class="logo-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-purple-300 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]">
-                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-                        </svg>
-                    </div>
-                    <h1 class="logo-text text-3xl font-bold tracking-[0.15em] text-purple-300 drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]">MULBERRY</h1>
+    <div class="main-container">
+        <main class="main-content">
+            <header class="header">
+                <div class="masthead">
+                    <span>Vol. 01</span>
+                    <span class="masthead-rule" aria-hidden="true"></span>
+                    <span>Música &amp; Registro</span>
+                    <span class="masthead-rule" aria-hidden="true"></span>
+                    <span class="masthead-edition">Ed. 2026</span>
+                </div>
+                <div class="logo-container">
+                    <h1 class="logo-text">Mulberry</h1>
+                    <span class="logo-tagline"><em>um índice musical, editado por você</em></span>
                 </div>
             </header>
 
-            <section class="filters-container flex items-center gap-3 mb-8 shrink-0" aria-label="Filtros">
-                <div class="filter-wrapper relative shrink-0">
-                    <button id="filterBtn" type="button" class="filter-trigger flex items-center gap-2 px-5 py-3 rounded-[20px] bg-purple-900/40 backdrop-blur-md border border-purple-500/30 shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(147,51,234,0.5)] transition-all duration-300" aria-haspopup="menu" aria-expanded="false">
-                        <span class="text-white font-medium">Filtros</span>
-                        <div class="arrow-icon w-6 h-6 rounded-full bg-purple-400/30 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-purple-200">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            <section class="filters-container" aria-label="Filtros">
+                <div class="filter-wrapper">
+                    <button id="filterBtn" type="button" class="filter-trigger" aria-haspopup="menu" aria-expanded="false">
+                        <span class="filter-trigger-label">Filtros</span>
+                        <span class="filter-trigger-arrow" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
                             </svg>
-                        </div>
+                        </span>
                     </button>
                     <div id="filterDropdown" class="filter-dropdown" role="menu"></div>
                 </div>
 
-                <div class="search-wrapper flex-1 flex items-center gap-2 px-3 py-1 rounded-full bg-purple-900/40 backdrop-blur-md border border-purple-500/30 transition-all duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-purple-300/70 shrink-0 ml-1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                    </svg>
-                    <input type="text" id="searchInput" placeholder="Buscar música, artista, gênero..." class="search-input flex-1 min-w-0 px-1 py-2 bg-transparent text-white placeholder-purple-300/50 focus:outline-none" aria-label="Buscar">
-                    <button id="profileBtn" type="button" class="profile-trigger w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-purple-800/60 border border-purple-400/40 hover:scale-105 hover:shadow-[0_0_15px_rgba(168,85,247,0.5)] transition-all duration-300 shrink-0" aria-label="Editar perfil">
-                        <img id="profileAvatar" alt="" class="w-full h-full object-cover" hidden>
-                        <svg id="profileAvatarFallback" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-purple-200">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                <div class="search-wrapper">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="11" cy="11" r="7"/>
+                            <path stroke-linecap="round" d="m20 20-3.5-3.5"/>
+                        </svg>
+                    </span>
+                    <input type="text" id="searchInput" placeholder="Procurar — música, artista, gênero" class="search-input" aria-label="Buscar">
+                    <button id="profileBtn" type="button" class="profile-trigger" aria-label="Editar perfil">
+                        <img id="profileAvatar" alt="" class="profile-trigger-img" hidden>
+                        <svg id="profileAvatarFallback" class="profile-trigger-fallback" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+                            <circle cx="12" cy="8" r="4"/>
+                            <path stroke-linecap="round" d="M4 21c1.5-4.5 5-7 8-7s6.5 2.5 8 7"/>
                         </svg>
                     </button>
                 </div>
             </section>
 
-            <section class="music-grid lg:flex-1 lg:overflow-y-auto lg:min-h-0 lg:pr-2" id="musicGrid" aria-label="Lista de músicas"></section>
+            <section class="music-grid" id="musicGrid" aria-label="Lista de músicas"></section>
         </main>
 
-        <aside class="sidebar w-full lg:w-1/4 lg:h-full lg:overflow-y-auto lg:min-h-0">
-            <div class="sidebar-content flex flex-col gap-6">
-                <button id="addMusicBtn" class="add-music-btn w-full py-4 rounded-[25px] bg-purple-900/50 backdrop-blur-md border border-purple-500/30 shadow-[0_0_25px_rgba(147,51,234,0.4)] hover:shadow-[0_0_35px_rgba(147,51,234,0.6)] hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3">
-                    <div class="plus-icon w-10 h-10 rounded-[12px] bg-purple-400/30 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-purple-200">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                        </svg>
-                    </div>
-                    <span class="text-white font-semibold text-lg tracking-wide">ADICIONAR MÚSICA</span>
-                </button>
+        <aside class="sidebar">
+            <button id="addMusicBtn" class="add-music-btn">
+                <span class="plus-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" d="M12 5v14m-7-7h14"/>
+                    </svg>
+                </span>
+                <span class="add-music-label">Novo registro</span>
+                <span class="add-music-arrow" aria-hidden="true">→</span>
+            </button>
 
-                <div class="chart-block p-6 rounded-[30px] bg-purple-900/40 backdrop-blur-md border border-purple-500/30 shadow-[0_0_20px_rgba(147,51,234,0.3)]">
-                    <h3 class="chart-title text-center text-white text-lg font-semibold mb-6 tracking-wide">Planilha de Gêneros</h3>
-                    <div class="chart-container relative w-48 h-48 mx-auto">
-                        <canvas id="genreChart"></canvas>
-                    </div>
-                    <div class="chart-legend mt-6" id="chartLegend"></div>
+            <section class="chart-block" aria-label="Distribuição por gênero">
+                <h3 class="chart-title">Planilha de gêneros</h3>
+                <div class="chart-container">
+                    <canvas id="genreChart"></canvas>
                 </div>
+                <div class="chart-legend" id="chartLegend"></div>
+            </section>
 
-                <div class="total-block p-6 rounded-[30px] bg-purple-900/40 backdrop-blur-md border border-purple-500/30 shadow-[0_0_20px_rgba(147,51,234,0.3)]">
-                    <p class="total-label text-center text-white text-lg mb-4">Total de músicas salvas</p>
-                    <div class="total-content flex items-center justify-center gap-4">
-                        <div class="total-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-purple-300">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.182l2.109-.602A9.062 9.062 0 0 1 12 21.75a9.062 9.062 0 0 1-6-2.108m0-12.553v3.75a2.25 2.25 0 0 0 1.632 2.163l1.32.377a1.803 1.803 0 0 0 .99-3.182l-2.109-.602A9.062 9.062 0 0 0 12 2.25a9.062 9.062 0 0 0 6 2.108" />
-                            </svg>
-                        </div>
-                        <span id="totalMusics" class="total-number text-5xl font-bold text-purple-200 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]">0</span>
+            <section class="total-block" aria-label="Resumo">
+                <span class="total-colophon" aria-hidden="true">№</span>
+                <p class="total-label">Total de músicas salvas</p>
+                <div class="total-content">
+                    <span id="totalMusics" class="total-number">0</span>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <p class="stat-label">Duração</p>
+                        <p id="totalDuration" class="stat-value">00:00:00</p>
                     </div>
-                    <div class="stats-grid mt-4 pt-4 border-t border-purple-500/20 grid grid-cols-2 gap-3">
-                        <div class="stat-item text-center">
-                            <p class="stat-label text-purple-300/70 text-xs uppercase tracking-wider">Duração total</p>
-                            <p id="totalDuration" class="stat-value text-purple-100 font-semibold text-sm mt-1">00:00:00</p>
-                        </div>
-                        <div class="stat-item text-center">
-                            <p class="stat-label text-purple-300/70 text-xs uppercase tracking-wider">Ouvintes/mês</p>
-                            <p id="totalListeners" class="stat-value text-purple-100 font-semibold text-sm mt-1">0</p>
-                        </div>
+                    <div class="stat-divider" aria-hidden="true"></div>
+                    <div class="stat-item">
+                        <p class="stat-label">Ouvintes/mês</p>
+                        <p id="totalListeners" class="stat-value">0</p>
                     </div>
                 </div>
-            </div>
+            </section>
         </aside>
     </div>
 
-    <footer class="footer text-center text-purple-300/40 text-xs py-6">
-        AT07 — Mulberry Dashboard · vanilla HTML/CSS/JS
+    <footer class="footer">
+        <span>AT07 · Mulberry · vanilla HTML/CSS/JS</span>
+        <span class="footer-rule" aria-hidden="true"></span>
+        <span class="footer-colophon">№ 01</span>
     </footer>
 
+    <!-- Add-music modal -->
     <div id="addMusicModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
         <div class="modal-overlay"></div>
-        <div class="modal-content p-8 rounded-[30px] bg-purple-950/90 backdrop-blur-xl border border-purple-500/40 shadow-[0_0_50px_rgba(147,51,234,0.5)] max-w-md w-full mx-4">
-            <div class="modal-header flex justify-between items-center mb-6">
-                <h2 id="modalTitle" class="text-2xl font-bold text-white tracking-wide">Adicionar Música</h2>
-                <button id="closeAddMusic" class="close-btn w-10 h-10 rounded-full bg-purple-800/50 hover:bg-purple-700/60 flex items-center justify-center transition-all duration-300" aria-label="Fechar">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-white">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-heading">
+                    <p class="modal-eyebrow">Novo registro</p>
+                    <h2 id="modalTitle" class="modal-title">Adicionar música</h2>
+                </div>
+                <button id="closeAddMusic" class="close-btn" aria-label="Fechar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                        <path stroke-linecap="round" d="M6 18 18 6M6 6l12 12"/>
                     </svg>
                 </button>
             </div>
-            <form id="addMusicForm" class="space-y-5">
-                <div>
-                    <label class="block text-purple-200 mb-2 font-medium" for="fNome">Nome da Música</label>
-                    <input id="fNome" type="text" name="nome" required class="form-input w-full px-4 py-3 rounded-[15px]">
+            <form id="addMusicForm" class="form">
+                <div class="form-row">
+                    <label class="form-label" for="fNome">Nome da música</label>
+                    <input id="fNome" type="text" name="nome" required class="form-input">
                 </div>
-                <div>
-                    <label class="block text-purple-200 mb-2 font-medium" for="fAlbum">Álbum</label>
-                    <input id="fAlbum" type="text" name="album" required class="form-input w-full px-4 py-3 rounded-[15px]">
+                <div class="form-row">
+                    <label class="form-label" for="fAlbum">Álbum</label>
+                    <input id="fAlbum" type="text" name="album" required class="form-input">
                 </div>
-                <div>
-                    <label class="block text-purple-200 mb-2 font-medium" for="fArtista">Artista</label>
-                    <input id="fArtista" type="text" name="artista" required class="form-input w-full px-4 py-3 rounded-[15px]">
+                <div class="form-row">
+                    <label class="form-label" for="fArtista">Artista</label>
+                    <input id="fArtista" type="text" name="artista" required class="form-input">
                 </div>
-                <div>
-                    <label class="block text-purple-200 mb-2 font-medium" for="fGenero">Gênero</label>
-                    <select id="fGenero" name="genero" required class="form-input w-full px-4 py-3 rounded-[15px]">
-                        <option value="">Selecione...</option>
-                        <option value="Blues">Blues</option>
-                        <option value="MPB">MPB</option>
-                        <option value="Rock">Rock</option>
-                        <option value="Metal">Metal</option>
-                        <option value="Grunge">Grunge</option>
-                        <option value="Heavy Metal">Heavy Metal</option>
-                        <option value="Groove Metal">Groove Metal</option>
-                        <option value="Countrycore">Countrycore</option>
-                    </select>
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label class="form-label" for="fGenero">Gênero</label>
+                        <select id="fGenero" name="genero" required class="form-input">
+                            <option value="">Selecione</option>
+                            <option value="Blues">Blues</option>
+                            <option value="MPB">MPB</option>
+                            <option value="Rock">Rock</option>
+                            <option value="Metal">Metal</option>
+                            <option value="Grunge">Grunge</option>
+                            <option value="Heavy Metal">Heavy Metal</option>
+                            <option value="Groove Metal">Groove Metal</option>
+                            <option value="Countrycore">Countrycore</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label" for="fDuracao">Duração</label>
+                        <input id="fDuracao" type="text" name="duracao" placeholder="3:45" required pattern="[0-9]+:[0-5][0-9]" class="form-input">
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-purple-200 mb-2 font-medium" for="fDuracao">Duração (mm:ss)</label>
-                    <input id="fDuracao" type="text" name="duracao" placeholder="3:45" required pattern="[0-9]+:[0-5][0-9]" class="form-input w-full px-4 py-3 rounded-[15px]">
+                <div class="form-row">
+                    <label class="form-label" for="fOuvintes">Ouvintes mensais</label>
+                    <input id="fOuvintes" type="number" name="ouvintes_mensais" required min="0" class="form-input">
                 </div>
-                <div>
-                    <label class="block text-purple-200 mb-2 font-medium" for="fOuvintes">Ouvintes Mensais</label>
-                    <input id="fOuvintes" type="number" name="ouvintes_mensais" required min="0" class="form-input w-full px-4 py-3 rounded-[15px]">
+                <div class="form-row">
+                    <label class="form-label" for="fImagem">URL da imagem</label>
+                    <input id="fImagem" type="url" name="url_imagem" placeholder="https://" class="form-input">
                 </div>
-                <div>
-                    <label class="block text-purple-200 mb-2 font-medium" for="fImagem">URL da Imagem</label>
-                    <input id="fImagem" type="url" name="url_imagem" placeholder="https://..." class="form-input w-full px-4 py-3 rounded-[15px]">
-                </div>
-                <button type="submit" class="submit-btn w-full py-4 mt-4 rounded-[20px] bg-gradient-to-r from-purple-700 to-pink-600 text-white font-bold text-lg hover:shadow-[0_0_25px_rgba(236,72,153,0.5)] hover:scale-[1.02] transition-all duration-300">
-                    Adicionar Música
+                <button type="submit" class="submit-btn">
+                    <span>Adicionar</span>
+                    <span class="submit-arrow" aria-hidden="true">→</span>
                 </button>
             </form>
         </div>
     </div>
 
+    <!-- Profile modal -->
     <div id="profileModal" class="modal" role="dialog" aria-labelledby="profileModalTitle" aria-modal="true">
         <div class="modal-overlay"></div>
-        <div class="modal-content p-8 rounded-[30px] bg-purple-950/90 backdrop-blur-xl border border-purple-500/40 shadow-[0_0_50px_rgba(147,51,234,0.5)] max-w-md w-full mx-4">
-            <div class="modal-header flex justify-between items-center mb-6">
-                <h2 id="profileModalTitle" class="text-2xl font-bold text-white tracking-wide">Editar Perfil</h2>
-                <button id="closeProfileModal" class="close-btn w-10 h-10 rounded-full bg-purple-800/50 hover:bg-purple-700/60 flex items-center justify-center transition-all duration-300" aria-label="Fechar">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-white">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-heading">
+                    <p class="modal-eyebrow">Identidade</p>
+                    <h2 id="profileModalTitle" class="modal-title">Editar perfil</h2>
+                </div>
+                <button id="closeProfileModal" class="close-btn" aria-label="Fechar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                        <path stroke-linecap="round" d="M6 18 18 6M6 6l12 12"/>
                     </svg>
                 </button>
             </div>
-            <form id="profileForm" class="space-y-5">
-                <div class="profile-preview flex justify-center mb-4">
-                    <div class="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center bg-purple-800/50 border-2 border-purple-400/40">
-                        <img id="profilePreviewImg" alt="" class="w-full h-full object-cover" hidden>
-                        <svg id="profilePreviewFallback" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-purple-300">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            <form id="profileForm" class="form">
+                <div class="profile-preview">
+                    <div class="profile-preview-frame">
+                        <img id="profilePreviewImg" alt="" class="profile-preview-img" hidden>
+                        <svg id="profilePreviewFallback" class="profile-preview-fallback" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+                            <circle cx="12" cy="8" r="4"/>
+                            <path stroke-linecap="round" d="M4 21c1.5-4.5 5-7 8-7s6.5 2.5 8 7"/>
                         </svg>
                     </div>
                 </div>
-                <div>
-                    <label class="block text-purple-200 mb-2 font-medium" for="pName">Nome</label>
-                    <input id="pName" type="text" name="name" required class="form-input w-full px-4 py-3 rounded-[15px]">
+                <div class="form-row">
+                    <label class="form-label" for="pName">Nome</label>
+                    <input id="pName" type="text" name="name" required class="form-input">
                 </div>
-                <div>
-                    <label class="block text-purple-200 mb-2 font-medium" for="pAvatar">URL da Imagem</label>
-                    <input id="pAvatar" type="url" name="avatarUrl" placeholder="https://..." class="form-input w-full px-4 py-3 rounded-[15px]">
+                <div class="form-row">
+                    <label class="form-label" for="pAvatar">URL da imagem</label>
+                    <input id="pAvatar" type="url" name="avatarUrl" placeholder="https://" class="form-input">
                 </div>
-                <button type="submit" class="submit-btn w-full py-4 mt-4 rounded-[20px] bg-gradient-to-r from-purple-700 to-pink-600 text-white font-bold text-lg hover:shadow-[0_0_25px_rgba(236,72,153,0.5)] hover:scale-[1.02] transition-all duration-300">
-                    Salvar
+                <button type="submit" class="submit-btn">
+                    <span>Salvar</span>
+                    <span class="submit-arrow" aria-hidden="true">→</span>
                 </button>
             </form>
         </div>
