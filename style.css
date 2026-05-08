@@ -319,7 +319,7 @@ a {
     padding: var(--s-3) var(--s-4);
     background: #3e0c70;
     border: 1px solid var(--rule-default);
-    border-radius: var(--r-md);
+    border-radius: var(--r-lg);
     color: var(--ink-primary);
     transition: background var(--d-fast) var(--ease-out),
                 border-color var(--d-fast) var(--ease-out);
@@ -370,7 +370,7 @@ a {
     overflow-y: auto;
     background: #3e0c70;
     border: 1px solid var(--rule-strong);
-    border-radius: var(--r-md);
+    border-radius: var(--r-lg);
     padding: var(--s-1);
     display: none;
     flex-direction: column;
@@ -395,7 +395,7 @@ a {
     justify-content: space-between;
     gap: var(--s-3);
     padding: var(--s-3) var(--s-4);
-    border-radius: var(--r-sm);
+    border-radius: var(--r-md);
     color: var(--ink-secondary);
     text-align: left;
     font-family: var(--font-body);
@@ -440,7 +440,7 @@ a {
     padding: 4px 4px 4px var(--s-4);
     background: #3e0c70;
     border: 1px solid var(--rule-default);
-    border-radius: var(--r-md);
+    border-radius: var(--r-lg);
     min-width: 0;
     transition: background var(--d-fast) var(--ease-out),
                 border-color var(--d-fast) var(--ease-out);
@@ -488,7 +488,7 @@ a {
     flex-shrink: 0;
     width: 36px;
     height: 36px;
-    border-radius: var(--r-sm);
+    border-radius: var(--r-md);
     background: #3e0c70;
     border: 1px solid var(--rule-default);
     overflow: hidden;
@@ -543,7 +543,7 @@ a {
     counter-increment: track;
     background: #3e0c70;
     border: 1px solid var(--rule-faint);
-    border-radius: var(--r-md);
+    border-radius: var(--r-lg);
     padding: var(--s-3);
     transition: background var(--d-base) var(--ease-out),
                 border-color var(--d-base) var(--ease-out);
@@ -567,7 +567,7 @@ a {
     font-size: 0.625rem;
     font-weight: 500;
     letter-spacing: 0.12em;
-    border-radius: var(--r-xs);
+    border-radius: var(--r-sm);
     transition: color var(--d-fast) var(--ease-out);
 }
 
@@ -578,7 +578,7 @@ a {
 .album-cover {
     width: 100%;
     aspect-ratio: 1;
-    border-radius: var(--r-xs);
+    border-radius: var(--r-sm);
     object-fit: cover;
     margin-bottom: var(--s-3);
     border: 1px solid var(--rule-default);
@@ -588,7 +588,7 @@ a {
 .album-cover-placeholder {
     width: 100%;
     aspect-ratio: 1;
-    border-radius: var(--r-xs);
+    border-radius: var(--r-sm);
     background:
         repeating-linear-gradient(45deg,
             transparent 0,
@@ -759,7 +759,7 @@ a {
     padding: var(--s-4) var(--s-4);
     background: #3e0c70;
     border: 1px solid #3e0c70;
-    border-radius: var(--r-md);
+    border-radius: var(--r-lg);
     color: var(--ink-primary);
     transition: background var(--d-fast) var(--ease-out),
                 border-color var(--d-fast) var(--ease-out);
@@ -806,7 +806,7 @@ a {
 .chart-block {
     background: #3e0c70;
     border: 1px solid var(--rule-faint);
-    border-radius: var(--r-md);
+    border-radius: var(--r-lg);
     padding: var(--s-5);
 }
 
@@ -885,7 +885,7 @@ a {
     position: relative;
     background: #3e0c70;
     border: 1px solid var(--rule-faint);
-    border-radius: var(--r-md);
+    border-radius: var(--r-lg);
     padding: var(--s-5);
 }
 
