@@ -21,14 +21,15 @@ Registra as escolhas feitas na rodada de refino do PR #1 e nas iterações subse
 ## Perfil
 
 - **Nome + avatar URL apenas**. Sem upload de arquivo (vanilla browser-only não escreve em disco).
-- **Persistido em `localStorage`** sob a chave `mulberry_profile` como JSON serializado. Não em `dados.json` porque static page não consegue escrever em arquivo no disco.
+- **Default vem do `dados.json`** (chave `user`); persistência da edição vai pro `localStorage` chave `mulberry_profile`.
 - **Modal de edição** abre ao clicar no avatar; preview ao vivo enquanto digita a URL.
 
 ## Dados
 
-- **`dados.json` separado de `script.js`** — armazena o seed das 8 músicas iniciais.
-- **Carregamento**: `localStorage` tem prioridade; se vazio, `fetch('dados.json')` → seed → grava no `localStorage`.
+- **`dados.json` é a fonte única de seed** — estrutura `{ user, musicas }`. `user` define o perfil default; `musicas` define os 8 registros iniciais.
+- **Carregamento (`carregarEstado`)**: se `localStorage` já tem ambas as chaves, pula o fetch. Senão, faz `fetch('dados.json')` uma vez e popula só o que falta. Decisões locais sempre prevalecem sobre o seed.
 - **Skip-worktree pattern**: arquivo é versionado uma vez (vai pra GitHub, novos clones recebem). Localmente, marcado com `git update-index --skip-worktree` pra que mudanças pessoais não virem commit. Também listado no `.gitignore` como nota de intenção (apesar de gitignore não afetar arquivos já trackeados).
+- **Pra atualizar o seed**: desliga skip-worktree (`git update-index --no-skip-worktree dados.json`), edita, commita, religa.
 - **Trade-off**: requer servir via HTTP (`fetch` não funciona em `file://`). README documenta.
 
 ## Renderização

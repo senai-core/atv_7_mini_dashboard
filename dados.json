@@ -1,4 +1,8 @@
 {
+  "user": {
+    "name": "Visitante",
+    "avatarUrl": ""
+  },
   "musicas": [
     { "id": 1, "nome": "Tempo Ruim - A Arte do Insulto", "album": "Matanza", "artista": "Matanza", "genero": "Countrycore", "duracao": "2:43", "ouvintes_mensais": 15420, "url_imagem": "https://i.scdn.co/image/ab67616d0000b27380d9d6384f5052b35e88966b" },
     { "id": 2, "nome": "Rust - Stronger Than Death", "album": "Black Label Society", "artista": "Black Label Society", "genero": "Heavy Metal", "duracao": "6:08", "ouvintes_mensais": 28350, "url_imagem": "https://picsum.photos/seed/blacklabel/300/300" },

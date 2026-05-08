@@ -4,8 +4,7 @@
 
 const STORAGE_KEY = 'mulberry_music_data';
 const PROFILE_KEY = 'mulberry_profile';
-
-const PROFILE_DEFAULT = { name: 'Éwerton Cercal', avatarUrl: '' };
+const SEED_FALLBACK = { user: { name: 'Visitante', avatarUrl: '' }, musicas: [] };
 
 const PALETA_GRAFICO = [
     'rgba(216, 180, 254, 0.85)',
@@ -19,7 +18,7 @@ const PALETA_GRAFICO = [
 ];
 
 let musicas = [];
-let profile = { ...PROFILE_DEFAULT };
+let profile = { ...SEED_FALLBACK.user };
 let generoSelecionado = 'todos';
 let termoBusca = '';
 let chart = null;
@@ -28,28 +27,36 @@ let chart = null;
 // Lógica
 // =========================================================================
 
-async function carregarMusicas() {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-        return JSON.parse(stored);
-    }
+async function carregarSeed() {
     try {
         const response = await fetch('dados.json');
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-        const lista = Array.isArray(data) ? data : (data.musicas || []);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
-        return lista;
+        return await response.json();
     } catch (error) {
         console.error('Erro ao carregar dados.json (sirva via http://, não file://):', error);
-        return [];
+        return SEED_FALLBACK;
     }
 }
 
-function carregarProfile() {
-    const stored = localStorage.getItem(PROFILE_KEY);
-    if (stored) return JSON.parse(stored);
-    return { ...PROFILE_DEFAULT };
+async function carregarEstado() {
+    const storedMusicas = localStorage.getItem(STORAGE_KEY);
+    const storedProfile = localStorage.getItem(PROFILE_KEY);
+
+    if (storedMusicas && storedProfile) {
+        return {
+            musicas: JSON.parse(storedMusicas),
+            profile: JSON.parse(storedProfile),
+        };
+    }
+
+    const seed = await carregarSeed();
+    const musicasFinal = storedMusicas ? JSON.parse(storedMusicas) : (seed.musicas || []);
+    const profileFinal = storedProfile ? JSON.parse(storedProfile) : { ...seed.user };
+
+    if (!storedMusicas) localStorage.setItem(STORAGE_KEY, JSON.stringify(musicasFinal));
+    if (!storedProfile) localStorage.setItem(PROFILE_KEY, JSON.stringify(profileFinal));
+
+    return { musicas: musicasFinal, profile: profileFinal };
 }
 
 function persistirMusicas() {
@@ -472,8 +479,9 @@ function configurarEventos() {
 }
 
 async function init() {
-    musicas = await carregarMusicas();
-    profile = carregarProfile();
+    const estado = await carregarEstado();
+    musicas = estado.musicas;
+    profile = estado.profile;
     renderizarTudo();
     configurarEventos();
 }
