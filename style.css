@@ -517,7 +517,7 @@ a {
 }
 
 /* =========================================================================
-   Music grid — auto-fit cards, track-numbered via CSS counter
+   Music grid — auto-fill cards, track-numbered via CSS counter
    ========================================================================= */
 .music-grid {
     display: grid;

@@ -2,9 +2,21 @@
 // Dados/Estado
 // =========================================================================
 
-const STORAGE_KEY = 'mulberry_music_data';
-const PROFILE_KEY = 'mulberry_profile';
-const SEED_FALLBACK = { user: { name: 'Visitante', avatarUrl: '' }, musicas: [] };
+const STORAGE_KEY = 'mulberry_state';
+
+const ESTADO_INICIAL = {
+    profile: { name: 'Visitante', avatarUrl: '' },
+    musicas: [
+        { id: 1, nome: 'Tempo Ruim - A Arte do Insulto', album: 'Matanza', artista: 'Matanza', genero: 'Countrycore', duracao: '2:43', ouvintes_mensais: 15420, url_imagem: 'https://i.scdn.co/image/ab67616d0000b27380d9d6384f5052b35e88966b' },
+        { id: 2, nome: 'Rust - Stronger Than Death', album: 'Black Label Society', artista: 'Black Label Society', genero: 'Heavy Metal', duracao: '6:08', ouvintes_mensais: 28350, url_imagem: 'https://picsum.photos/seed/blacklabel/300/300' },
+        { id: 3, nome: 'Ainda Bem - O Que Você Quer Saber de Verdade', album: 'Marisa Monte', artista: 'Marisa Monte', genero: 'MPB', duracao: '3:35', ouvintes_mensais: 89200, url_imagem: 'https://picsum.photos/seed/marisa/300/300' },
+        { id: 4, nome: 'Little Wing - Axis: Bold As Love', album: 'Jimi Hendrix', artista: 'Jimi Hendrix', genero: 'Blues', duracao: '2:25', ouvintes_mensais: 456700, url_imagem: 'https://picsum.photos/seed/hendrix/300/300' },
+        { id: 5, nome: 'Domingas - Jorge Ben', album: 'Jorge Ben', artista: 'Jorge Ben Jor', genero: 'MPB', duracao: '3:31', ouvintes_mensais: 128900, url_imagem: 'https://picsum.photos/seed/jorgeben/300/300' },
+        { id: 6, nome: "10's - The Great Southern Trendkill", album: 'Pantera', artista: 'Pantera', genero: 'Groove Metal', duracao: '4:50', ouvintes_mensais: 67800, url_imagem: 'https://picsum.photos/seed/pantera/300/300' },
+        { id: 7, nome: 'One Last Breath - Weathered', album: 'Creed', artista: 'Creed', genero: 'Grunge', duracao: '3:58', ouvintes_mensais: 345600, url_imagem: 'https://picsum.photos/seed/creed/300/300' },
+        { id: 8, nome: 'Black - Ten', album: 'Pearl Jam', artista: 'Pearl Jam', genero: 'Grunge', duracao: '5:42', ouvintes_mensais: 512400, url_imagem: 'https://picsum.photos/seed/pearljam/300/300' },
+    ],
+};
 
 const PALETA_GRAFICO = [
     'rgba(216, 180, 254, 0.85)',
@@ -18,7 +30,7 @@ const PALETA_GRAFICO = [
 ];
 
 let musicas = [];
-let profile = { ...SEED_FALLBACK.user };
+let profile = { ...ESTADO_INICIAL.profile };
 let generoSelecionado = 'todos';
 let termoBusca = '';
 let chart = null;
@@ -27,45 +39,29 @@ let chart = null;
 // Lógica
 // =========================================================================
 
-async function carregarSeed() {
-    try {
-        const response = await fetch('dados.json');
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return await response.json();
-    } catch (error) {
-        console.error('Erro ao carregar dados.json (sirva via http://, não file://):', error);
-        return SEED_FALLBACK;
+function carregarEstado() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+        try {
+            const parsed = JSON.parse(stored);
+            return {
+                musicas: Array.isArray(parsed.musicas) ? parsed.musicas : [],
+                profile: parsed.profile && typeof parsed.profile === 'object'
+                    ? parsed.profile
+                    : { ...ESTADO_INICIAL.profile },
+            };
+        } catch (err) {
+            console.warn('Estado em localStorage corrompido, usando seed inicial.', err);
+        }
     }
+    return {
+        musicas: ESTADO_INICIAL.musicas.map((m) => ({ ...m })),
+        profile: { ...ESTADO_INICIAL.profile },
+    };
 }
 
-async function carregarEstado() {
-    const storedMusicas = localStorage.getItem(STORAGE_KEY);
-    const storedProfile = localStorage.getItem(PROFILE_KEY);
-
-    if (storedMusicas && storedProfile) {
-        return {
-            musicas: JSON.parse(storedMusicas),
-            profile: JSON.parse(storedProfile),
-        };
-    }
-
-    const seed = await carregarSeed();
-    const seedReal = seed.musicas && seed.musicas.length > 0;
-    const musicasFinal = storedMusicas ? JSON.parse(storedMusicas) : (seed.musicas || []);
-    const profileFinal = storedProfile ? JSON.parse(storedProfile) : { ...seed.user };
-
-    if (seedReal && !storedMusicas) localStorage.setItem(STORAGE_KEY, JSON.stringify(musicasFinal));
-    if (seedReal && !storedProfile) localStorage.setItem(PROFILE_KEY, JSON.stringify(profileFinal));
-
-    return { musicas: musicasFinal, profile: profileFinal };
-}
-
-function persistirMusicas() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(musicas));
-}
-
-function persistirProfile() {
-    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+function persistir() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ musicas, profile }));
 }
 
 function filtrar() {
@@ -458,7 +454,7 @@ function configurarEventos() {
             url_imagem: data.get('url_imagem') || '',
         };
         musicas.push(nova);
-        persistirMusicas();
+        persistir();
         renderizarTudo();
         form.reset();
         fecharModal('addMusicModal');
@@ -477,14 +473,14 @@ function configurarEventos() {
             name: data.get('name'),
             avatarUrl: data.get('avatarUrl') || '',
         };
-        persistirProfile();
+        persistir();
         renderizarPerfil();
         fecharModal('profileModal');
     });
 }
 
-async function init() {
-    const estado = await carregarEstado();
+function init() {
+    const estado = carregarEstado();
     musicas = estado.musicas;
     profile = estado.profile;
     renderizarTudo();

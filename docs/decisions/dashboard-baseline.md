@@ -10,7 +10,7 @@ Registra as escolhas feitas na rodada de refino do PR #1 e nas iterações subse
 ## Layout
 
 - **Viewport-locked no desktop (≥1024px)**: só a `.music-grid` scrolla. Header, filtros e sidebar ficam fixos. Mobile mantém scroll de página inteiro porque o layout stacka.
-- **Grid de 4 colunas no desktop wide** (≥1280px), descendo pra 3, 2, 1 nas larguras menores. Mockup mostrava 3 mas o usuário pediu 4.
+- **Music grid**: `grid-template-columns: repeat(auto-fill, minmax(220px, 1fr))`. Auto-fill (não auto-fit) garante que slots vazios fiquem reservados — assim filtrar pra 1 resultado não faz o card único esticar pra largura toda.
 - **Avatar do usuário saiu do header** e virou o botão de perfil no fim da search bar.
 
 ## Filtros
@@ -21,16 +21,17 @@ Registra as escolhas feitas na rodada de refino do PR #1 e nas iterações subse
 ## Perfil
 
 - **Nome + avatar URL apenas**. Sem upload de arquivo (vanilla browser-only não escreve em disco).
-- **Default vem do `dados.json`** (chave `user`); persistência da edição vai pro `localStorage` chave `mulberry_profile`.
+- **Default vem do `ESTADO_INICIAL.profile`** hardcoded no `script.js`. Persistência da edição vai pro mesmo `mulberry_state` do `localStorage`.
 - **Modal de edição** abre ao clicar no avatar; preview ao vivo enquanto digita a URL.
+- **Nome aparece na tagline** do header (`editado por <nome>`) — sem isso, a edição parecia invisível.
 
 ## Dados
 
-- **`dados.json` é a fonte única de seed** — estrutura `{ user, musicas }`. `user` define o perfil default; `musicas` define os 8 registros iniciais.
-- **Carregamento (`carregarEstado`)**: se `localStorage` já tem ambas as chaves, pula o fetch. Senão, faz `fetch('dados.json')` uma vez e popula só o que falta. Decisões locais sempre prevalecem sobre o seed.
-- **Skip-worktree pattern**: arquivo é versionado uma vez (vai pra GitHub, novos clones recebem). Localmente, marcado com `git update-index --skip-worktree` pra que mudanças pessoais não virem commit. Também listado no `.gitignore` como nota de intenção (apesar de gitignore não afetar arquivos já trackeados).
-- **Pra atualizar o seed**: desliga skip-worktree (`git update-index --no-skip-worktree dados.json`), edita, commita, religa.
-- **Trade-off**: requer servir via HTTP (`fetch` não funciona em `file://`). README documenta.
+- **`localStorage` é a única fonte de persistência** — chave única `mulberry_state` com `{ musicas, profile }` num só JSON serializado. Sem `dados.json`, sem `fetch`, sem `async`.
+- **Seed inicial hardcoded em `script.js`** (`ESTADO_INICIAL`). Carregado quando o `localStorage` está vazio.
+- **Por que sem `dados.json`**: JS estático em browser não tem permissão de escrita em arquivo (sandbox de segurança). Manter um JSON externo só serviria como seed read-only — adicionava complexidade (fetch async, `file://` não funciona, gitignore + skip-worktree per-clone) sem ganho real. A rubrica também exige `localStorage` explicitamente.
+- **Trade-off**: pra atualizar o seed (ex.: trocar o catálogo inicial entre clones), edita o array `ESTADO_INICIAL` direto no `script.js`. É código, não dado externo, e isso é OK pra um projeto deste porte.
+- **Resetar estado local**: DevTools → Application → Local Storage → deleta `mulberry_state`. Reload mostra o seed.
 
 ## Renderização
 
