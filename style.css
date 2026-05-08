@@ -97,7 +97,7 @@ body {
     font-size: var(--text-base);
     font-weight: 400;
     line-height: 1.5;
-    background: var(--ink-base);
+    background: #66329f;
     color: var(--ink-primary);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
@@ -147,7 +147,7 @@ a {
     position: fixed;
     inset: 0;
     z-index: -1;
-    background: var(--ink-base);
+    background: #66329f;
 }
 
 .page-bg::before {
@@ -317,7 +317,7 @@ a {
     gap: var(--s-3);
     height: 100%;
     padding: var(--s-3) var(--s-4);
-    background: var(--ink-card);
+    background: #3e0c70;
     border: 1px solid var(--rule-default);
     border-radius: var(--r-md);
     color: var(--ink-primary);
@@ -326,12 +326,12 @@ a {
 }
 
 .filter-trigger:hover {
-    background: var(--ink-card-hover);
+    background: #4e0e8a;
     border-color: var(--rule-strong);
 }
 
 .filter-trigger[aria-expanded="true"] {
-    background: var(--ink-card-hover);
+    background: #4e0e8a;
     border-color: var(--rule-active);
 }
 
@@ -368,7 +368,7 @@ a {
     min-width: 240px;
     max-height: 360px;
     overflow-y: auto;
-    background: var(--ink-elevated);
+    background: #3e0c70;
     border: 1px solid var(--rule-strong);
     border-radius: var(--r-md);
     padding: var(--s-1);
@@ -418,7 +418,7 @@ a {
 }
 
 .filter-option:hover {
-    background: var(--ink-card-hover);
+    background: #4e0e8a;
     color: var(--ink-primary);
 }
 
@@ -438,7 +438,7 @@ a {
     align-items: center;
     gap: var(--s-3);
     padding: 4px 4px 4px var(--s-4);
-    background: var(--ink-card);
+    background: #3e0c70;
     border: 1px solid var(--rule-default);
     border-radius: var(--r-md);
     min-width: 0;
@@ -447,7 +447,7 @@ a {
 }
 
 .search-wrapper:focus-within {
-    background: var(--ink-card-hover);
+    background: #4e0e8a;
     border-color: var(--rule-strong);
 }
 
@@ -489,7 +489,7 @@ a {
     width: 36px;
     height: 36px;
     border-radius: var(--r-sm);
-    background: var(--ink-elevated);
+    background: #3e0c70;
     border: 1px solid var(--rule-default);
     overflow: hidden;
     display: inline-flex;
@@ -500,7 +500,7 @@ a {
 }
 
 .profile-trigger:hover {
-    background: var(--ink-card-hover);
+    background: #4e0e8a;
     border-color: var(--rule-active);
 }
 
@@ -541,7 +541,7 @@ a {
 .music-card {
     position: relative;
     counter-increment: track;
-    background: var(--ink-card);
+    background: #3e0c70;
     border: 1px solid var(--rule-faint);
     border-radius: var(--r-md);
     padding: var(--s-3);
@@ -550,7 +550,7 @@ a {
 }
 
 .music-card:hover {
-    background: var(--ink-card-hover);
+    background: #4e0e8a;
     border-color: var(--rule-default);
 }
 
@@ -757,17 +757,17 @@ a {
     gap: var(--s-3);
     width: 100%;
     padding: var(--s-4) var(--s-4);
-    background: var(--accent);
-    border: 1px solid var(--accent);
+    background: #3e0c70;
+    border: 1px solid #3e0c70;
     border-radius: var(--r-md);
-    color: var(--ink-base);
+    color: var(--ink-primary);
     transition: background var(--d-fast) var(--ease-out),
                 border-color var(--d-fast) var(--ease-out);
 }
 
 .add-music-btn:hover {
-    background: var(--accent-deep);
-    border-color: var(--accent-deep);
+    background: #2e0858;
+    border-color: #2e0858;
 }
 
 .add-music-btn .plus-icon {
@@ -776,7 +776,7 @@ a {
     justify-content: center;
     width: 22px;
     height: 22px;
-    border: 1px solid var(--ink-base);
+    border: 1px solid var(--ink-primary);
     border-radius: var(--r-xs);
     flex-shrink: 0;
 }
@@ -804,7 +804,7 @@ a {
 
 /* Chart block */
 .chart-block {
-    background: var(--ink-card);
+    background: #3e0c70;
     border: 1px solid var(--rule-faint);
     border-radius: var(--r-md);
     padding: var(--s-5);
@@ -883,7 +883,7 @@ a {
 /* Total block */
 .total-block {
     position: relative;
-    background: var(--ink-card);
+    background: #3e0c70;
     border: 1px solid var(--rule-faint);
     border-radius: var(--r-md);
     padding: var(--s-5);
