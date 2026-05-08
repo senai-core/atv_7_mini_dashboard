@@ -2,21 +2,18 @@
 // Dados/Estado
 // =========================================================================
 
-const STORAGE_KEY = 'mulberry_state';
+const STORAGE_KEY = 'mulberry_music_data';
 
-const ESTADO_INICIAL = {
-    profile: { name: 'Visitante', avatarUrl: '' },
-    musicas: [
-        { id: 1, nome: 'Tempo Ruim - A Arte do Insulto', album: 'Matanza', artista: 'Matanza', genero: 'Countrycore', duracao: '2:43', ouvintes_mensais: 15420, url_imagem: 'https://i.scdn.co/image/ab67616d0000b27380d9d6384f5052b35e88966b' },
-        { id: 2, nome: 'Rust - Stronger Than Death', album: 'Black Label Society', artista: 'Black Label Society', genero: 'Heavy Metal', duracao: '6:08', ouvintes_mensais: 28350, url_imagem: 'https://picsum.photos/seed/blacklabel/300/300' },
-        { id: 3, nome: 'Ainda Bem - O Que Você Quer Saber de Verdade', album: 'Marisa Monte', artista: 'Marisa Monte', genero: 'MPB', duracao: '3:35', ouvintes_mensais: 89200, url_imagem: 'https://picsum.photos/seed/marisa/300/300' },
-        { id: 4, nome: 'Little Wing - Axis: Bold As Love', album: 'Jimi Hendrix', artista: 'Jimi Hendrix', genero: 'Blues', duracao: '2:25', ouvintes_mensais: 456700, url_imagem: 'https://picsum.photos/seed/hendrix/300/300' },
-        { id: 5, nome: 'Domingas - Jorge Ben', album: 'Jorge Ben', artista: 'Jorge Ben Jor', genero: 'MPB', duracao: '3:31', ouvintes_mensais: 128900, url_imagem: 'https://picsum.photos/seed/jorgeben/300/300' },
-        { id: 6, nome: "10's - The Great Southern Trendkill", album: 'Pantera', artista: 'Pantera', genero: 'Groove Metal', duracao: '4:50', ouvintes_mensais: 67800, url_imagem: 'https://picsum.photos/seed/pantera/300/300' },
-        { id: 7, nome: 'One Last Breath - Weathered', album: 'Creed', artista: 'Creed', genero: 'Grunge', duracao: '3:58', ouvintes_mensais: 345600, url_imagem: 'https://picsum.photos/seed/creed/300/300' },
-        { id: 8, nome: 'Black - Ten', album: 'Pearl Jam', artista: 'Pearl Jam', genero: 'Grunge', duracao: '5:42', ouvintes_mensais: 512400, url_imagem: 'https://picsum.photos/seed/pearljam/300/300' },
-    ],
-};
+const dadosIniciais = [
+    { id: 1, nome: 'Tempo Ruim - A Arte do Insulto', album: 'Matanza', artista: 'Matanza', genero: 'Countrycore', duracao: '2:43', ouvintes_mensais: 15420, url_imagem: 'https://i.scdn.co/image/ab67616d0000b27380d9d6384f5052b35e88966b' },
+    { id: 2, nome: 'Rust - Stronger Than Death', album: 'Black Label Society', artista: 'Black Label Society', genero: 'Heavy Metal', duracao: '6:08', ouvintes_mensais: 28350, url_imagem: 'https://i.scdn.co/image/ab67616d0000b2737e6a1645a8d23a98087ed6f9' },
+    { id: 3, nome: 'Ainda Bem - O Que Você Quer Saber de Verdade', album: 'Marisa Monte', artista: 'Marisa Monte', genero: 'MPB', duracao: '3:35', ouvintes_mensais: 89200, url_imagem: 'https://cdn-images.dzcdn.net/images/cover/745738969ea23df2e6d66a8827254f9e/1900x1900-000000-80-0-0.jpg' },
+    { id: 4, nome: 'Little Wing - Axis: Bold As Love', album: 'Jimi Hendrix', artista: 'Jimi Hendrix', genero: 'Blues', duracao: '2:25', ouvintes_mensais: 456700, url_imagem: 'https://i.scdn.co/image/ab67616d0000b27319dcd95d28b63d10164327f2' },
+    { id: 5, nome: 'Domingas - Jorge Ben', album: 'Jorge Ben', artista: 'Jorge Ben Jor', genero: 'MPB', duracao: '3:31', ouvintes_mensais: 128900, url_imagem: 'https://i.scdn.co/image/ab67616d0000b273fe44be99c91db81833e83fab' },
+{ id: 6, nome: "10's - The Great Southern Trendkill", album: 'Pantera', artista: 'Pantera', genero: 'Groove Metal', duracao: '4:50', ouvintes_mensais: 67800, url_imagem: 'https://cdn-images.dzcdn.net/images/cover/6c5df693c44169ae721268d428a9e451/0x1900-000000-80-0-0.jpg' },
+    { id: 7, nome: 'One Last Breath - Weathered', album: 'Creed', artista: 'Creed', genero: 'Grunge', duracao: '3:58', ouvintes_mensais: 345600, url_imagem: 'https://cdn-images.dzcdn.net/images/cover/b712383c6e595685b38c3db8fb78769e/1900x1900-000000-80-0-0.jpg' },
+    { id: 8, nome: 'Black - Ten', album: 'Pearl Jam', artista: 'Pearl Jam', genero: 'Grunge', duracao: '5:42', ouvintes_mensais: 512400, url_imagem: 'https://m.media-amazon.com/images/I/61vAHV2ptZL._UXNaN_FMjpg_QL85_.jpg' },
+];
 
 const PALETA_GRAFICO = [
     'rgba(216, 180, 254, 0.85)',
@@ -29,8 +26,7 @@ const PALETA_GRAFICO = [
     'rgba(236, 72, 153, 0.85)',
 ];
 
-let musicas = [];
-let profile = { ...ESTADO_INICIAL.profile };
+let musicas = carregarDoStorage();
 let generoSelecionado = 'todos';
 let termoBusca = '';
 let chart = null;
@@ -39,29 +35,16 @@ let chart = null;
 // Lógica
 // =========================================================================
 
-function carregarEstado() {
+function carregarDoStorage() {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-        try {
-            const parsed = JSON.parse(stored);
-            return {
-                musicas: Array.isArray(parsed.musicas) ? parsed.musicas : [],
-                profile: parsed.profile && typeof parsed.profile === 'object'
-                    ? parsed.profile
-                    : { ...ESTADO_INICIAL.profile },
-            };
-        } catch (err) {
-            console.warn('Estado em localStorage corrompido, usando seed inicial.', err);
-        }
+        return JSON.parse(stored);
     }
-    return {
-        musicas: ESTADO_INICIAL.musicas.map((m) => ({ ...m })),
-        profile: { ...ESTADO_INICIAL.profile },
-    };
+    return [...dadosIniciais];
 }
 
 function persistir() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ musicas, profile }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(musicas));
 }
 
 function filtrar() {
@@ -144,14 +127,6 @@ function gerarDadosGrafico() {
     return itens;
 }
 
-function listarGeneros() {
-    const set = new Set();
-    for (let i = 0; i < musicas.length; i++) {
-        set.add(musicas[i].genero);
-    }
-    return ['todos', ...Array.from(set).sort((a, b) => a.localeCompare(b))];
-}
-
 // =========================================================================
 // Interface
 // =========================================================================
@@ -160,8 +135,6 @@ function renderizarTudo() {
     renderizarCards();
     renderizarIndicadores();
     renderizarGrafico();
-    renderizarOpcoesFiltro();
-    renderizarPerfil();
 }
 
 function renderizarCards() {
@@ -326,122 +299,30 @@ function criarLegendaItem(item) {
     return wrapper;
 }
 
-function renderizarOpcoesFiltro() {
-    const dd = document.getElementById('filterDropdown');
-    dd.replaceChildren();
-    const generos = listarGeneros();
-    for (let i = 0; i < generos.length; i++) {
-        const g = generos[i];
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'filter-option';
-        if (g === generoSelecionado) btn.classList.add('active');
-        btn.textContent = g === 'todos' ? 'Todos' : g;
-        btn.dataset.genero = g;
-        btn.addEventListener('click', () => {
-            generoSelecionado = g;
-            renderizarCards();
-            renderizarOpcoesFiltro();
-            fecharFilterDropdown();
-        });
-        dd.appendChild(btn);
-    }
-}
-
-function abrirFilterDropdown() {
-    document.getElementById('filterDropdown').classList.add('show');
-    document.getElementById('filterBtn').setAttribute('aria-expanded', 'true');
-}
-
-function fecharFilterDropdown() {
-    document.getElementById('filterDropdown').classList.remove('show');
-    document.getElementById('filterBtn').setAttribute('aria-expanded', 'false');
-}
-
-function renderizarPerfil() {
-    const img = document.getElementById('profileAvatar');
-    const fb = document.getElementById('profileAvatarFallback');
-    const nameEl = document.getElementById('profileNameDisplay');
-    if (profile.avatarUrl) {
-        img.src = profile.avatarUrl;
-        img.hidden = false;
-        fb.hidden = true;
-    } else {
-        img.removeAttribute('src');
-        img.hidden = true;
-        fb.hidden = false;
-    }
-    if (nameEl) {
-        nameEl.textContent = profile.name && profile.name.trim() ? profile.name : 'você';
-    }
-}
-
-function preencherFormProfile() {
-    document.getElementById('pName').value = profile.name;
-    document.getElementById('pAvatar').value = profile.avatarUrl;
-    atualizarPreviewProfile(profile.avatarUrl);
-}
-
-function atualizarPreviewProfile(url) {
-    const img = document.getElementById('profilePreviewImg');
-    const fb = document.getElementById('profilePreviewFallback');
-    if (url) {
-        img.src = url;
-        img.hidden = false;
-        fb.hidden = true;
-    } else {
-        img.removeAttribute('src');
-        img.hidden = true;
-        fb.hidden = false;
-    }
-}
-
-function abrirModal(id) {
-    document.getElementById(id).classList.add('show');
-}
-
-function fecharModal(id) {
-    document.getElementById(id).classList.remove('show');
-}
-
-function configurarModal(modalId, openBtnId, closeBtnId) {
-    const modal = document.getElementById(modalId);
-    document.getElementById(openBtnId).addEventListener('click', () => abrirModal(modalId));
-    document.getElementById(closeBtnId).addEventListener('click', () => fecharModal(modalId));
-    modal.querySelector('.modal-overlay').addEventListener('click', () => fecharModal(modalId));
-}
-
 function configurarEventos() {
-    // Filter dropdown
-    document.getElementById('filterBtn').addEventListener('click', (e) => {
-        e.stopPropagation();
-        const dd = document.getElementById('filterDropdown');
-        if (dd.classList.contains('show')) fecharFilterDropdown();
-        else abrirFilterDropdown();
-    });
-    document.addEventListener('click', (e) => {
-        const wrapper = document.querySelector('.filter-wrapper');
-        if (wrapper && !wrapper.contains(e.target)) fecharFilterDropdown();
-    });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            fecharFilterDropdown();
-            fecharModal('addMusicModal');
-            fecharModal('profileModal');
-        }
-    });
+    const chips = document.querySelectorAll('.genre-btn');
+    for (let i = 0; i < chips.length; i++) {
+        chips[i].addEventListener('click', () => {
+            for (let j = 0; j < chips.length; j++) chips[j].classList.remove('active');
+            chips[i].classList.add('active');
+            generoSelecionado = chips[i].dataset.genero;
+            renderizarCards();
+        });
+    }
 
-    // Search
     document.getElementById('searchInput').addEventListener('input', (e) => {
         termoBusca = e.target.value;
         renderizarCards();
     });
 
-    // Add-music modal
-    configurarModal('addMusicModal', 'addMusicBtn', 'closeAddMusic');
-    document.getElementById('addMusicForm').addEventListener('submit', (e) => {
+    const modal = document.getElementById('addMusicModal');
+    document.getElementById('addMusicBtn').addEventListener('click', () => modal.classList.add('show'));
+    document.getElementById('closeAddMusic').addEventListener('click', () => modal.classList.remove('show'));
+    modal.querySelector('.modal-overlay').addEventListener('click', () => modal.classList.remove('show'));
+
+    const form = document.getElementById('addMusicForm');
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const form = e.target;
         const data = new FormData(form);
         const nova = {
             id: Date.now(),
@@ -457,34 +338,9 @@ function configurarEventos() {
         persistir();
         renderizarTudo();
         form.reset();
-        fecharModal('addMusicModal');
-    });
-
-    // Profile modal
-    configurarModal('profileModal', 'profileBtn', 'closeProfileModal');
-    document.getElementById('profileBtn').addEventListener('click', preencherFormProfile);
-    document.getElementById('pAvatar').addEventListener('input', (e) => {
-        atualizarPreviewProfile(e.target.value);
-    });
-    document.getElementById('profileForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const data = new FormData(e.target);
-        profile = {
-            name: data.get('name'),
-            avatarUrl: data.get('avatarUrl') || '',
-        };
-        persistir();
-        renderizarPerfil();
-        fecharModal('profileModal');
+        modal.classList.remove('show');
     });
 }
 
-function init() {
-    const estado = carregarEstado();
-    musicas = estado.musicas;
-    profile = estado.profile;
-    renderizarTudo();
-    configurarEventos();
-}
-
-init();
+renderizarTudo();
+configurarEventos();
